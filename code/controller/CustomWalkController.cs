@@ -35,8 +35,8 @@ namespace MurderboxGamemode
 
 		public CustomWalkController()
 		{
-			Duck = new DuckController( this );
-			Unstuck = new Unstuck( this );
+			Duck = new DuckController(this);
+			Unstuck = new Unstuck(this);
 		}
 
 		/// <summary>
@@ -45,10 +45,10 @@ namespace MurderboxGamemode
 		public override BBox GetHull()
 		{
 			var girth = BodyGirth * 0.5f;
-			var mins = new Vector3( -girth, -girth, 0 );
-			var maxs = new Vector3( +girth, +girth, BodyHeight );
+			var mins = new Vector3(-girth, -girth, 0);
+			var maxs = new Vector3(+girth, +girth, BodyHeight);
 
-			return new BBox( mins, maxs );
+			return new BBox(mins, maxs);
 		}
 
 		protected bool _isTouchingLadder = false;
@@ -57,9 +57,9 @@ namespace MurderboxGamemode
 		protected Vector3 _mins;
 		protected Vector3 _maxs;
 
-		public virtual void SetBBox( Vector3 mins, Vector3 maxs )
+		public virtual void SetBBox(Vector3 mins, Vector3 maxs)
 		{
-			if ( _mins == mins && _maxs == maxs )
+			if (_mins == mins && _maxs == maxs)
 				return;
 
 			_mins = mins;
@@ -72,12 +72,12 @@ namespace MurderboxGamemode
 		public virtual void UpdateBBox()
 		{
 			var girth = BodyGirth * 0.5f;
-			var mins = new Vector3( -girth, -girth, 0 ) * Pawn.Scale;
-			var maxs = new Vector3( +girth, +girth, BodyHeight ) * Pawn.Scale;
+			var mins = new Vector3(-girth, -girth, 0) * Pawn.Scale;
+			var maxs = new Vector3(+girth, +girth, BodyHeight) * Pawn.Scale;
 
-			Duck.UpdateBBox( ref mins, ref maxs );
+			Duck.UpdateBBox(ref mins, ref maxs);
 
-			SetBBox( mins, maxs );
+			SetBBox(mins, maxs);
 		}
 
 		public override void Simulate()
@@ -88,44 +88,44 @@ namespace MurderboxGamemode
 			EyePosLocal += TraceOffset;
 			EyeRot = Input.Rotation;
 
-			if ( Unstuck.TestAndFix() )
+			if (Unstuck.TestAndFix())
 				return;
 
 			CheckLadder();
 			Swimming = Pawn.WaterLevel.Fraction > 0.6f;
 
-			if ( !Swimming && !_isTouchingLadder )
+			if (!Swimming && !_isTouchingLadder)
 			{
-				Velocity -= new Vector3( 0, 0, Gravity * 0.5f ) * Time.Delta;
-				Velocity += new Vector3( 0, 0, BaseVelocity.z ) * Time.Delta;
+				Velocity -= new Vector3(0, 0, Gravity * 0.5f) * Time.Delta;
+				Velocity += new Vector3(0, 0, BaseVelocity.z) * Time.Delta;
 
-				BaseVelocity = BaseVelocity.WithZ( 0 );
+				BaseVelocity = BaseVelocity.WithZ(0);
 			}
 
-			if ( AutoJump ? Input.Down( InputButton.Jump ) : Input.Pressed( InputButton.Jump ) )
+			if (AutoJump ? Input.Down(InputButton.Jump) : Input.Pressed(InputButton.Jump))
 			{
 				CheckJumpButton();
 			}
 
 			var startOnGround = GroundEntity != null;
 
-			if ( startOnGround )
+			if (startOnGround)
 			{
-				Velocity = Velocity.WithZ( 0 );
+				Velocity = Velocity.WithZ(0);
 
-				if ( GroundEntity != null )
+				if (GroundEntity != null)
 				{
-					ApplyFriction( GroundFriction * _surfaceFriction );
+					ApplyFriction(GroundFriction * _surfaceFriction);
 				}
 			}
 
-			WishVelocity = new Vector3( Input.Forward, Input.Left, 0 );
-			var inSpeed = WishVelocity.Length.Clamp( 0, 1 );
+			WishVelocity = new Vector3(Input.Forward, Input.Left, 0);
+			var inSpeed = WishVelocity.Length.Clamp(0, 1);
 			WishVelocity *= Input.Rotation;
 
-			if ( !Swimming && !_isTouchingLadder )
+			if (!Swimming && !_isTouchingLadder)
 			{
-				WishVelocity = WishVelocity.WithZ( 0 );
+				WishVelocity = WishVelocity.WithZ(0);
 			}
 
 			WishVelocity = WishVelocity.Normal * inSpeed;
@@ -137,16 +137,16 @@ namespace MurderboxGamemode
 
 			OnPreTickMove();
 
-			if ( Swimming )
+			if (Swimming)
 			{
-				ApplyFriction( 1 );
+				ApplyFriction(1);
 				WaterMove();
 			}
-			else if ( _isTouchingLadder )
+			else if (_isTouchingLadder)
 			{
 				LadderMove();
 			}
-			else if ( GroundEntity != null )
+			else if (GroundEntity != null)
 			{
 				stayOnGround = true;
 				WalkMove();
@@ -156,26 +156,26 @@ namespace MurderboxGamemode
 				AirMove();
 			}
 
-			CategorizePosition( stayOnGround );
+			CategorizePosition(stayOnGround);
 
-			if ( !Swimming && !_isTouchingLadder )
+			if (!Swimming && !_isTouchingLadder)
 			{
-				Velocity -= new Vector3( 0, 0, Gravity * 0.5f ) * Time.Delta;
+				Velocity -= new Vector3(0, 0, Gravity * 0.5f) * Time.Delta;
 			}
 
-			if ( GroundEntity != null )
+			if (GroundEntity != null)
 			{
-				Velocity = Velocity.WithZ( 0 );
+				Velocity = Velocity.WithZ(0);
 			}
 		}
 
 		public virtual float GetWishSpeed()
 		{
 			var ws = Duck.GetWishSpeed();
-			if ( ws >= 0 ) return ws;
+			if (ws >= 0) return ws;
 
-			if ( Input.Down( InputButton.Run ) ) return SprintSpeed;
-			if ( Input.Down( InputButton.Walk ) ) return WalkSpeed;
+			if (Input.Down(InputButton.Run)) return SprintSpeed;
+			if (Input.Down(InputButton.Walk)) return WalkSpeed;
 
 			return DefaultSpeed;
 		}
@@ -185,27 +185,27 @@ namespace MurderboxGamemode
 			var wishdir = WishVelocity.Normal;
 			var wishspeed = WishVelocity.Length;
 
-			WishVelocity = WishVelocity.WithZ( 0 );
+			WishVelocity = WishVelocity.WithZ(0);
 			WishVelocity = WishVelocity.Normal * wishspeed;
 
-			Velocity = Velocity.WithZ( 0 );
-			Accelerate( wishdir, wishspeed, 0, Acceleration );
-			Velocity = Velocity.WithZ( 0 );
+			Velocity = Velocity.WithZ(0);
+			Accelerate(wishdir, wishspeed, 0, Acceleration);
+			Velocity = Velocity.WithZ(0);
 
 			Velocity += BaseVelocity;
 
 			try
 			{
-				if ( Velocity.Length < 1.0f )
+				if (Velocity.Length < 1.0f)
 				{
 					Velocity = Vector3.Zero;
 					return;
 				}
 
-				var dest = (Position + Velocity * Time.Delta).WithZ( Position.z );
-				var pm = TraceBBox( Position, dest );
+				var dest = (Position + Velocity * Time.Delta).WithZ(Position.z);
+				var pm = TraceBBox(Position, dest);
 
-				if ( pm.Fraction == 1 )
+				if (pm.Fraction == 1)
 				{
 					Position = pm.EndPos;
 					StayOnGround();
@@ -235,14 +235,14 @@ namespace MurderboxGamemode
 			Position = startPos;
 			Velocity = startVel;
 
-			var trace = TraceBBox( Position, Position + Vector3.Up * (StepSize + DistEpsilon) );
-			if ( !trace.StartedSolid ) Position = trace.EndPos;
+			var trace = TraceBBox(Position, Position + Vector3.Up * (StepSize + DistEpsilon));
+			if (!trace.StartedSolid) Position = trace.EndPos;
 
 			TryPlayerMove();
 
-			trace = TraceBBox( Position, Position + Vector3.Down * (StepSize + DistEpsilon * 2) );
+			trace = TraceBBox(Position, Position + Vector3.Down * (StepSize + DistEpsilon * 2));
 
-			if ( !trace.Hit || Vector3.GetAngle( Vector3.Up, trace.Normal ) > GroundAngle )
+			if (!trace.Hit || Vector3.GetAngle(Vector3.Up, trace.Normal) > GroundAngle)
 			{
 				Position = withoutStepPos;
 				Velocity = withoutStepVel;
@@ -250,15 +250,15 @@ namespace MurderboxGamemode
 			}
 
 
-			if ( !trace.StartedSolid )
+			if (!trace.StartedSolid)
 				Position = trace.EndPos;
 
 			var withStepPos = Position;
 
-			float withoutStep = (withoutStepPos - startPos).WithZ( 0 ).Length;
-			float withStep = (withStepPos - startPos).WithZ( 0 ).Length;
+			float withoutStep = (withoutStepPos - startPos).WithZ(0).Length;
+			float withStep = (withStepPos - startPos).WithZ(0).Length;
 
-			if ( withoutStep > withStep )
+			if (withoutStep > withStep)
 			{
 				Position = withoutStepPos;
 				Velocity = withoutStepVel;
@@ -270,20 +270,20 @@ namespace MurderboxGamemode
 		/// <summary>
 		/// Add our wish direction and speed onto our velocity.
 		/// </summary>
-		public virtual void Accelerate( Vector3 wishDir, float wishSpeed, float speedLimit, float acceleration )
+		public virtual void Accelerate(Vector3 wishDir, float wishSpeed, float speedLimit, float acceleration)
 		{
-			if ( speedLimit > 0 && wishSpeed > speedLimit )
+			if (speedLimit > 0 && wishSpeed > speedLimit)
 				wishSpeed = speedLimit;
 
-			var currentSpeed = Velocity.Dot( wishDir );
+			var currentSpeed = Velocity.Dot(wishDir);
 			var addSpeed = wishSpeed - currentSpeed;
 
-			if ( addSpeed <= 0 )
+			if (addSpeed <= 0)
 				return;
 
 			var accelSpeed = acceleration * Time.Delta * wishSpeed * _surfaceFriction;
 
-			if ( accelSpeed > addSpeed )
+			if (accelSpeed > addSpeed)
 				accelSpeed = addSpeed;
 
 			Velocity += wishDir * accelSpeed;
@@ -292,18 +292,18 @@ namespace MurderboxGamemode
 		/// <summary>
 		/// Remove ground friction from velocity.
 		/// </summary>
-		public virtual void ApplyFriction( float frictionAmount = 1.0f )
+		public virtual void ApplyFriction(float frictionAmount = 1.0f)
 		{
 			var speed = Velocity.Length;
-			if ( speed < 0.1f ) return;
+			if (speed < 0.1f) return;
 
 			var control = (speed < StopSpeed) ? StopSpeed : speed;
 			var drop = control * Time.Delta * frictionAmount;
 			var newspeed = speed - drop;
 
-			if ( newspeed < 0 ) newspeed = 0;
+			if (newspeed < 0) newspeed = 0;
 
-			if ( newspeed != speed )
+			if (newspeed != speed)
 			{
 				newspeed /= speed;
 				Velocity *= newspeed;
@@ -312,15 +312,15 @@ namespace MurderboxGamemode
 
 		private void CheckJumpButton()
 		{
-			if ( Swimming )
+			if (Swimming)
 			{
 				ClearGroundEntity();
-				Velocity = Velocity.WithZ( 100 );
+				Velocity = Velocity.WithZ(100);
 
 				return;
 			}
 
-			if ( GroundEntity == null )
+			if (GroundEntity == null)
 				return;
 
 			ClearGroundEntity();
@@ -329,14 +329,14 @@ namespace MurderboxGamemode
 			var flMul = 268.3281572999747f * 1.2f;
 			var startZ = Velocity.z;
 
-			if ( Duck.IsActive )
+			if (Duck.IsActive)
 				flMul *= 0.8f;
 
-			Velocity = Velocity.WithZ( startZ + flMul * flGroundFactor );
-			Velocity -= new Vector3( 0, 0, Gravity * 0.5f ) * Time.Delta;
+			Velocity = Velocity.WithZ(startZ + flMul * flGroundFactor);
+			Velocity -= new Vector3(0, 0, Gravity * 0.5f) * Time.Delta;
 
 			AddJumpVelocity();
-			AddEvent( "jump" );
+			AddEvent("jump");
 		}
 
 		public virtual void AirMove()
@@ -344,7 +344,7 @@ namespace MurderboxGamemode
 			var wishdir = WishVelocity.Normal;
 			var wishspeed = WishVelocity.Length;
 
-			Accelerate( wishdir, wishspeed, AirControl, AirAcceleration );
+			Accelerate(wishdir, wishspeed, AirControl, AirAcceleration);
 
 			Velocity += BaseVelocity;
 
@@ -360,7 +360,7 @@ namespace MurderboxGamemode
 
 			wishSpeed *= 0.8f;
 
-			Accelerate( wishDir, wishSpeed, 100, Acceleration );
+			Accelerate(wishDir, wishSpeed, 100, Acceleration);
 
 			Velocity += BaseVelocity;
 
@@ -371,7 +371,7 @@ namespace MurderboxGamemode
 
 		public virtual void CheckLadder()
 		{
-			if ( _isTouchingLadder && Input.Pressed( InputButton.Jump ) )
+			if (_isTouchingLadder && Input.Pressed(InputButton.Jump))
 			{
 				Velocity = _ladderNormal * 100.0f;
 				_isTouchingLadder = false;
@@ -383,16 +383,16 @@ namespace MurderboxGamemode
 			var start = Position;
 			var end = start + (_isTouchingLadder ? (_ladderNormal * -1.0f) : WishVelocity.Normal) * ladderDistance;
 
-			var pm = Trace.Ray( start, end )
-				.Size( _mins, _maxs )
-				.HitLayer( CollisionLayer.All, false )
-				.HitLayer( CollisionLayer.LADDER, true )
-				.Ignore( Pawn )
+			var pm = Trace.Ray(start, end)
+				.Size(_mins, _maxs)
+				.HitLayer(CollisionLayer.All, false)
+				.HitLayer(CollisionLayer.LADDER, true)
+				.Ignore(Pawn)
 				.Run();
 
 			_isTouchingLadder = false;
 
-			if ( pm.Hit )
+			if (pm.Hit)
 			{
 				_isTouchingLadder = true;
 				_ladderNormal = pm.Normal;
@@ -402,26 +402,26 @@ namespace MurderboxGamemode
 		public virtual void LadderMove()
 		{
 			var velocity = WishVelocity;
-			var normalDot = velocity.Dot( _ladderNormal );
+			var normalDot = velocity.Dot(_ladderNormal);
 			var cross = _ladderNormal * normalDot;
 
-			Velocity = (velocity - cross) + (-normalDot * _ladderNormal.Cross( Vector3.Up.Cross( _ladderNormal ).Normal ));
+			Velocity = (velocity - cross) + (-normalDot * _ladderNormal.Cross(Vector3.Up.Cross(_ladderNormal).Normal));
 
 			TryPlayerMove();
 		}
 
 		public virtual void TryPlayerMove()
 		{
-			var mover = new MoveHelper( Position, Velocity );
-			mover.Trace = mover.Trace.Size( _mins, _maxs ).Ignore( Pawn );
+			var mover = new MoveHelper(Position, Velocity);
+			mover.Trace = mover.Trace.Size(_mins, _maxs).Ignore(Pawn);
 			mover.MaxStandableAngle = GroundAngle;
-			mover.TryMove( Time.Delta );
+			mover.TryMove(Time.Delta);
 
 			Position = mover.Position;
 			Velocity = mover.Velocity;
 		}
 
-		private void CategorizePosition( bool stayOnGround )
+		private void CategorizePosition(bool stayOnGround)
 		{
 			_surfaceFriction = 1.0f;
 
@@ -432,59 +432,59 @@ namespace MurderboxGamemode
 
 			var moveToEndPos = false;
 
-			if ( GroundEntity != null )
+			if (GroundEntity != null)
 			{
 				moveToEndPos = true;
 				point.z -= StepSize;
 			}
-			else if ( stayOnGround )
+			else if (stayOnGround)
 			{
 				moveToEndPos = true;
 				point.z -= StepSize;
 			}
 
-			if ( isMovingUpFast || Swimming )
+			if (isMovingUpFast || Swimming)
 			{
 				ClearGroundEntity();
 				return;
 			}
 
-			var pm = TraceBBox( bumpOrigin, point, 4.0f );
+			var pm = TraceBBox(bumpOrigin, point, 4.0f);
 
-			if ( pm.Entity == null || Vector3.GetAngle( Vector3.Up, pm.Normal ) > GroundAngle )
+			if (pm.Entity == null || Vector3.GetAngle(Vector3.Up, pm.Normal) > GroundAngle)
 			{
 				ClearGroundEntity();
 				moveToEndPos = false;
 
-				if ( Velocity.z > 0 )
+				if (Velocity.z > 0)
 					_surfaceFriction = 0.25f;
 			}
 			else
 			{
-				UpdateGroundEntity( pm );
+				UpdateGroundEntity(pm);
 			}
 
-			if ( moveToEndPos && !pm.StartedSolid && pm.Fraction > 0.0f && pm.Fraction < 1.0f )
+			if (moveToEndPos && !pm.StartedSolid && pm.Fraction > 0.0f && pm.Fraction < 1.0f)
 			{
 				Position = pm.EndPos;
 			}
 
-			OnPostCategorizePosition( stayOnGround, pm );
+			OnPostCategorizePosition(stayOnGround, pm);
 		}
 
 		/// <summary>
 		/// Check for a new ground entity.
 		/// </summary>
-		public virtual void UpdateGroundEntity( TraceResult tr )
+		public virtual void UpdateGroundEntity(TraceResult tr)
 		{
 			GroundNormal = tr.Normal;
 
 			_surfaceFriction = tr.Surface.Friction * 1.25f;
-			if ( _surfaceFriction > 1 ) _surfaceFriction = 1;
+			if (_surfaceFriction > 1) _surfaceFriction = 1;
 
 			GroundEntity = tr.Entity;
 
-			if ( GroundEntity != null )
+			if (GroundEntity != null)
 			{
 				BaseVelocity = GroundEntity.Velocity;
 			}
@@ -495,7 +495,7 @@ namespace MurderboxGamemode
 		/// </summary>
 		public virtual void ClearGroundEntity()
 		{
-			if ( GroundEntity == null ) return;
+			if (GroundEntity == null) return;
 
 			GroundEntity = null;
 			GroundNormal = Vector3.Up;
@@ -507,9 +507,9 @@ namespace MurderboxGamemode
 		/// liftFeet will move the start position up by this amount, while keeping the top of the bbox at the same 
 		/// position. This is good when tracing down because you won't be tracing through the ceiling above.
 		/// </summary>
-		public override TraceResult TraceBBox( Vector3 start, Vector3 end, float liftFeet = 0.0f )
+		public override TraceResult TraceBBox(Vector3 start, Vector3 end, float liftFeet = 0.0f)
 		{
-			return TraceBBox( start, end, _mins, _maxs, liftFeet );
+			return TraceBBox(start, end, _mins, _maxs, liftFeet);
 		}
 
 		/// <summary>
@@ -519,21 +519,21 @@ namespace MurderboxGamemode
 		{
 			var start = Position + Vector3.Up * 2;
 			var end = Position + Vector3.Down * StepSize;
-			var trace = TraceBBox( Position, start );
+			var trace = TraceBBox(Position, start);
 
 			start = trace.EndPos;
-			trace = TraceBBox( start, end );
+			trace = TraceBBox(start, end);
 
-			if ( trace.Fraction <= 0 ) return;
-			if ( trace.Fraction >= 1 ) return;
-			if ( trace.StartedSolid ) return;
-			if ( Vector3.GetAngle( Vector3.Up, trace.Normal ) > GroundAngle ) return;
+			if (trace.Fraction <= 0) return;
+			if (trace.Fraction >= 1) return;
+			if (trace.StartedSolid) return;
+			if (Vector3.GetAngle(Vector3.Up, trace.Normal) > GroundAngle) return;
 
 			Position = trace.EndPos;
 		}
 
 		public virtual void OnPreTickMove() { }
 		public virtual void AddJumpVelocity() { }
-		public virtual void OnPostCategorizePosition( bool stayOnGround, TraceResult trace ) { }
+		public virtual void OnPostCategorizePosition(bool stayOnGround, TraceResult trace) { }
 	}
 }

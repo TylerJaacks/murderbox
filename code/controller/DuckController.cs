@@ -1,6 +1,5 @@
 using Sandbox;
 
-// TODO: Needs to be looked at.
 namespace MurderboxGamemode
 {
 	[Library]
@@ -10,26 +9,26 @@ namespace MurderboxGamemode
 
 		public bool IsActive;
 
-		public DuckController( BasePlayerController controller )
+		public DuckController(BasePlayerController controller)
 		{
 			Controller = controller;
 		}
 
 		public virtual void PreTick()
 		{
-			bool wants = Input.Down( InputButton.Duck );
+			bool wants = Input.Down(InputButton.Duck);
 
-			if ( wants != IsActive )
+			if (wants != IsActive)
 			{
-				if ( wants )
+				if (wants)
 					TryDuck();
 				else
 					TryUnDuck();
 			}
 
-			if ( IsActive )
+			if (IsActive)
 			{
-				Controller.SetTag( "ducked" );
+				Controller.SetTag("ducked");
 				Controller.EyePosLocal *= 0.5f;
 			}
 		}
@@ -41,9 +40,9 @@ namespace MurderboxGamemode
 
 		void TryUnDuck()
 		{
-			var pm = Controller.TraceBBox( Controller.Position, Controller.Position, _originalMins, _originalMaxs );
+			var pm = Controller.TraceBBox(Controller.Position, Controller.Position, _originalMins, _originalMaxs);
 
-			if ( pm.StartedSolid )
+			if (pm.StartedSolid)
 				return;
 
 			IsActive = false;
@@ -52,18 +51,18 @@ namespace MurderboxGamemode
 		private Vector3 _originalMins;
 		private Vector3 _originalMaxs;
 
-		internal void UpdateBBox( ref Vector3 mins, ref Vector3 maxs )
+		internal void UpdateBBox(ref Vector3 mins, ref Vector3 maxs)
 		{
 			_originalMins = mins;
 			_originalMaxs = maxs;
 
-			if ( IsActive )
-				maxs = maxs.WithZ( 36 );
+			if (IsActive)
+				maxs = maxs.WithZ(36);
 		}
 
 		public float GetWishSpeed()
 		{
-			if ( !IsActive ) return -1;
+			if (!IsActive) return -1;
 			return 64.0f;
 		}
 	}
