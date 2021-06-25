@@ -33,7 +33,7 @@ namespace MurderBoxGamemode
         [Input]
         public void DoSomethingElse(string str)
         {
-
+            
         }
 
         [Input( Name = "DoSomething", Help = "Help text for input" )]

@@ -11,6 +11,8 @@ namespace MurderboxGamemode
 	{
 		public override string RoundName => "LOBBY";
 
+        // TODO: Spawn Clues at random locations.
+        // TODO: Spawn Players at random locations.
 		protected override void OnStart()
 		{
 			Log.Info("Started Lobby Round");

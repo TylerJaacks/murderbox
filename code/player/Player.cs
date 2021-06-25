@@ -15,6 +15,7 @@ namespace MurderBoxGamemode
 		private float _walkBob = 0;
 		private float _lean = 0;
 		private float _FOV = 0;
+		private bool _hasGun { get; set; } = false;
 
         public bool HasTeam
 		{
