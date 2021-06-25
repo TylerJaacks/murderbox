@@ -116,7 +116,7 @@ namespace MurderBoxGamemode
 		public override void OnKilled(Entity entity)
 		{
 			if (entity is Player player)
-				Round?.OnPlayerKilled( player );
+				Round?.OnPlayerKilled(player);
 
 			base.OnKilled(entity);
 		}
@@ -125,9 +125,9 @@ namespace MurderBoxGamemode
 		{
 			Log.Info(client.Name + " left, checking minimum player count...");
 
-			Round?.OnPlayerLeave( client.Pawn as Player );
+			Round?.OnPlayerLeave(client.Pawn as Player);
 
-			base.ClientDisconnect( client, reason );
+			base.ClientDisconnect(client, reason);
 		}
 
 		public override void ClientJoined(Client client)
@@ -149,7 +149,7 @@ namespace MurderBoxGamemode
 		{
 			Round?.OnTick();
 
-			for ( var i = 0; i < _teams.Count; i++ )
+			for (var i = 0; i < _teams.Count; i++)
 			{
 				_teams[i].OnTick();
 			}
@@ -179,11 +179,11 @@ namespace MurderBoxGamemode
 
 		private void CheckMinimumPlayers()
 		{
-			if ( Client.All.Count >= MinPlayers)
+			if (Client.All.Count >= MinPlayers)
 			{
 				if (Round is LobbyRound || Round == null)
 				{
-					ChangeRound(new MurderRound() );
+					ChangeRound(new MurderRound());
 				}
 			}
 			else if (Round is not LobbyRound)
