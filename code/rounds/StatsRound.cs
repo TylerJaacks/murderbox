@@ -12,9 +12,8 @@ namespace MurderboxGamemode
 		public override string RoundName => "STATS";
 		public override int RoundDuration => 10;
 
-		[Net] public string HiddenName { get; set; }
-		[Net] public int HiddenKills { get; set; }
-		[Net] public string HiddenHunter { get; set; }
+		[Net] public string MurdererName { get; set; }
+		[Net] public int MurdererKills { get; set; }
 		[Net] public string FirstDeath { get; set; }
 		[Net] public string Winner { get; set; }
 
@@ -32,20 +31,11 @@ namespace MurderboxGamemode
 
 				_statsPanel.AddStat(new StatInfo
 				{
-					Title = "Hidden Kills",
-					PlayerName = HiddenName,
+					Title = "Murderer Kills",
+					PlayerName = MurdererName,
 					ImageClass = "kills",
-					TeamClass = "team_hidden",
-					Text = HiddenKills.ToString()
-				});
-
-				_statsPanel.AddStat(new StatInfo
-				{
-					Title = "Hidden Hunter",
-					PlayerName = !string.IsNullOrEmpty(HiddenHunter) ? HiddenHunter : "N/A",
-					ImageClass = "hidden_killer",
-					TeamClass = "team_iris",
-					Text = ""
+					TeamClass = "team_murderer",
+					Text = MurdererKills.ToString()
 				});
 
 				_statsPanel.AddStat(new StatInfo
@@ -53,7 +43,7 @@ namespace MurderboxGamemode
 					Title = "First Death",
 					PlayerName = !string.IsNullOrEmpty(FirstDeath) ? FirstDeath : "N/A",
 					ImageClass = "first_death",
-					TeamClass = "team_iris",
+					TeamClass = "team_bystanders",
 					Text = ""
 				});
 			}

@@ -5,7 +5,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-// TODO: Needs to be looked at.
 namespace MurderboxGamemode
 {
 	public class MurdererController : CustomWalkController
@@ -32,17 +31,7 @@ namespace MurderboxGamemode
         // TODO: Look at this code.
 		public override float GetWishSpeed()
 		{
-			var speed = base.GetWishSpeed();
-
-			if (Pawn is Player player)
-			{
-				if (player.Deployment == DeploymentType.HIDDEN_BEAST)
-					speed *= 0.7f;
-				else if (player.Deployment == DeploymentType.HIDDEN_ROGUE)
-					speed *= 1.25f;
-			}
-
-			return speed;
+			return base.GetWishSpeed();
 		}
 
 		public override void Simulate()
