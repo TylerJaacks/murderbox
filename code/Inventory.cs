@@ -2,7 +2,7 @@ using Sandbox;
 using System;
 using System.Linq;
 
-namespace MurderBoxGamemode
+namespace MurderboxGamemode
 {
 	partial class Inventory : BaseInventory
 	{

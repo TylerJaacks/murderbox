@@ -4,7 +4,7 @@ using System;
 using System.Linq;
 
 // TODO: Add support for the Murderer to see footsteps.
-namespace MurderBoxGamemode
+namespace MurderboxGamemode
 {
     public partial class Player : Sandbox.Player
     {

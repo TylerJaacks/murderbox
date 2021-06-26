@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MurderBoxGamemode
+namespace MurderboxGamemode
 {
     [Library("clue", Description = "Represents a Clue.")]
     public partial class ClueEntity : Entity

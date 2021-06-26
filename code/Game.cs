@@ -1,6 +1,6 @@
 using Sandbox;
 
-namespace MurderBoxGamemode
+namespace MurderboxGamemode
 {
     [Library("murderbox", Title = "Murderbox")]
     partial class Game : Sandbox.Game

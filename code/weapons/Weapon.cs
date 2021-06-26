@@ -1,7 +1,7 @@
 ﻿using Sandbox;
 using System;
 
-namespace HiddenGamemode
+namespace MurderboxGamemode
 {
 	partial class Weapon : BaseWeapon
 	{
@@ -38,13 +38,13 @@ namespace HiddenGamemode
 
 		public int AvailableAmmo()
 		{
-			if ( Owner is not Player owner ) return 0;
-			return owner.AmmoCount( AmmoType );
+			if (Owner is not Player owner) return 0;
+			return owner.AmmoCount(AmmoType);
 		}
 
-		public override void ActiveStart( Entity owner )
+		public override void ActiveStart(Entity owner)
 		{
-			base.ActiveStart( owner );
+			base.ActiveStart(owner);
 
 			TimeSinceDeployed = 0;
 		}
@@ -55,42 +55,42 @@ namespace HiddenGamemode
 
 			AmmoClip = ClipSize;
 
-			SetModel( "weapons/rust_pistol/rust_pistol.vmdl" );
+			SetModel("weapons/rust_pistol/rust_pistol.vmdl");
 		}
 
 		public override void Reload()
 		{
-			if ( IsMelee || IsReloading )
+			if (IsMelee || IsReloading)
 				return;
 
-			if ( AmmoClip >= ClipSize )
+			if (AmmoClip >= ClipSize)
 				return;
 
 			TimeSinceReload = 0;
 
-			if ( Owner is Player player )
+			if (Owner is Player player)
 			{
-				if ( !UnlimitedAmmo )
+				if (!UnlimitedAmmo)
 				{
-					if ( player.AmmoCount( AmmoType ) <= 0 )
+					if (player.AmmoCount(AmmoType) <= 0)
 						return;
 				}
 			}
 
 			IsReloading = true;
 
-			(Owner as AnimEntity).SetAnimParam( "b_reload", true );
+			(Owner as AnimEntity).SetAnimParam("b_reload", true);
 
 			DoClientReload();
 		}
 
-		public override void Simulate( Client owner )
+		public override void Simulate(Client owner)
 		{
-			if ( owner.Pawn is Player player )
+			if (owner.Pawn is Player player)
 			{
-				if ( owner.Pawn.LifeState == LifeState.Alive )
+				if (owner.Pawn.LifeState == LifeState.Alive)
 				{
-					if ( ChargeAttackEndTime > 0f && Time.Now >= ChargeAttackEndTime )
+					if (ChargeAttackEndTime > 0f && Time.Now >= ChargeAttackEndTime)
 					{
 						OnChargeAttackFinish();
 						ChargeAttackEndTime = 0f;
@@ -102,12 +102,12 @@ namespace HiddenGamemode
 				}
 			}
 
-			if ( !IsReloading )
+			if (!IsReloading)
 			{
-				base.Simulate( owner );
+				base.Simulate(owner);
 			}
 
-			if ( IsReloading && TimeSinceReload > ReloadTime )
+			if (IsReloading && TimeSinceReload > ReloadTime)
 			{
 				OnReloadFinish();
 			}
@@ -115,7 +115,7 @@ namespace HiddenGamemode
 
 		public override bool CanPrimaryAttack()
 		{
-			if ( ChargeAttackEndTime > 0f && Time.Now < ChargeAttackEndTime )
+			if (ChargeAttackEndTime > 0f && Time.Now < ChargeAttackEndTime)
 				return false;
 
 			return base.CanPrimaryAttack();
@@ -123,7 +123,7 @@ namespace HiddenGamemode
 
 		public override bool CanSecondaryAttack()
 		{
-			if ( ChargeAttackEndTime > 0f && Time.Now < ChargeAttackEndTime )
+			if (ChargeAttackEndTime > 0f && Time.Now < ChargeAttackEndTime)
 				return false;
 
 			return base.CanSecondaryAttack();
@@ -140,13 +140,13 @@ namespace HiddenGamemode
 		{
 			IsReloading = false;
 
-			if ( Owner is Player player )
+			if (Owner is Player player)
 			{
-				if ( !UnlimitedAmmo )
+				if (!UnlimitedAmmo)
 				{
-					var ammo = player.TakeAmmo( AmmoType, ClipSize - AmmoClip );
+					var ammo = player.TakeAmmo(AmmoType, ClipSize - AmmoClip);
 
-					if ( ammo == 0 )
+					if (ammo == 0)
 						return;
 
 					AmmoClip += ammo;
@@ -161,7 +161,7 @@ namespace HiddenGamemode
 		[ClientRpc]
 		public virtual void DoClientReload()
 		{
-			ViewModelEntity?.SetAnimParam( "reload", true );
+			ViewModelEntity?.SetAnimParam("reload", true);
 		}
 
 		public override void AttackPrimary()
@@ -170,7 +170,7 @@ namespace HiddenGamemode
 			TimeSinceSecondaryAttack = 0;
 
 			ShootEffects();
-			ShootBullet( 0.05f, 1.5f, BaseDamage, 3.0f );
+			ShootBullet(0.05f, 1.5f, BaseDamage, 3.0f);
 		}
 
 		[ClientRpc]
@@ -180,46 +180,46 @@ namespace HiddenGamemode
 
 			if (!IsMelee)
 			{
-				Particles.Create( "particles/pistol_muzzleflash.vpcf", EffectEntity, "muzzle" );
+				Particles.Create("particles/pistol_muzzleflash.vpcf", EffectEntity, "muzzle");
 			}
 
-			if ( IsLocalPawn )
+			if (IsLocalPawn)
 			{
 				_ = new Sandbox.ScreenShake.Perlin();
 			}
 
-			ViewModelEntity?.SetAnimParam( "fire", true );
-			CrosshairPanel?.OnEvent( "fire" );
+			ViewModelEntity?.SetAnimParam("fire", true);
+			CrosshairPanel?.OnEvent("fire");
 		}
 
-		public virtual void ShootBullet( float spread, float force, float damage, float bulletSize )
+		public virtual void ShootBullet(float spread, float force, float damage, float bulletSize)
 		{
 			var forward = Owner.EyeRot.Forward;
 			forward += (Vector3.Random + Vector3.Random + Vector3.Random + Vector3.Random) * spread * 0.25f;
 			forward = forward.Normal;
 
-			foreach ( var tr in TraceBullet( Owner.EyePos, Owner.EyePos + forward * 5000, bulletSize ) )
+			foreach (var tr in TraceBullet(Owner.EyePos, Owner.EyePos + forward * 5000, bulletSize))
 			{
-				tr.Surface.DoBulletImpact( tr );
+				tr.Surface.DoBulletImpact(tr);
 
-				if ( !IsServer ) continue;
-				if ( !tr.Entity.IsValid() ) continue;
+				if (!IsServer) continue;
+				if (!tr.Entity.IsValid()) continue;
 
-				using ( Prediction.Off() )
+				using (Prediction.Off())
 				{
-					var damageInfo = DamageInfo.FromBullet( tr.EndPos, forward * 100 * force, damage )
-						.UsingTraceResult( tr )
-						.WithAttacker( Owner )
-						.WithWeapon( this );
+					var damageInfo = DamageInfo.FromBullet(tr.EndPos, forward * 100 * force, damage)
+						.UsingTraceResult(tr)
+						.WithAttacker(Owner)
+						.WithWeapon(this);
 
-					tr.Entity.TakeDamage( damageInfo );
+					tr.Entity.TakeDamage(damageInfo);
 				}
 			}
 		}
 
-		public bool TakeAmmo( int amount )
+		public bool TakeAmmo(int amount)
 		{
-			if ( AmmoClip < amount )
+			if (AmmoClip < amount)
 				return false;
 
 			AmmoClip -= amount;
@@ -230,7 +230,7 @@ namespace HiddenGamemode
 		{
 			Host.AssertClient();
 
-			if ( string.IsNullOrEmpty( ViewModelPath ) )
+			if (string.IsNullOrEmpty(ViewModelPath))
 				return;
 
 			ViewModelEntity = new ViewModel
@@ -240,27 +240,27 @@ namespace HiddenGamemode
 				EnableViewmodelRendering = true
 			};
 
-			ViewModelEntity.SetModel( ViewModelPath );
+			ViewModelEntity.SetModel(ViewModelPath);
 		}
 
 		public override void CreateHudElements()
 		{
-			if ( Local.Hud == null ) return;
+			if (Local.Hud == null) return;
 
-			if ( !HasLaserDot )
+			if (!HasLaserDot)
 			{
 				CrosshairPanel = new Crosshair
 				{
 					Parent = Local.Hud
 				};
 
-				CrosshairPanel.AddClass( ClassInfo.Name );
+				CrosshairPanel.AddClass(ClassInfo.Name);
 			}
 		}
 
 		public bool IsUsable()
 		{
-			if ( IsMelee || ClipSize == 0 || AmmoClip > 0 )
+			if (IsMelee || ClipSize == 0 || AmmoClip > 0)
 			{
 				return true;
 			}

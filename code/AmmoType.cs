@@ -1,4 +1,4 @@
-namespace MurderBoxGamemode
+namespace MurderboxGamemode
 {
 	public enum AmmoType
 	{

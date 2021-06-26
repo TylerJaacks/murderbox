@@ -1,9 +1,9 @@
 ﻿using Sandbox;
 using System;
 
-namespace HiddenGamemode
+namespace MurderboxGamemode
 {
-	[Library( "hdn_knife", Title = "Knife" )]
+	[Library("mb_knife", Title = "Knife")]
 	partial class Knife : Weapon
 	{
 		public override string ViewModelPath => "weapons/rust_boneknife/v_rust_boneknife.vmdl";
@@ -22,30 +22,30 @@ namespace HiddenGamemode
 			// TODO: EnableDrawing = false does not work.
 			RenderAlpha = 0f;
 
-			SetModel( "weapons/rust_boneknife/rust_boneknife.vmdl" );
+			SetModel("weapons/rust_boneknife/rust_boneknife.vmdl");
 		}
 
-		public virtual void MeleeStrike( float damage, float force )
+		public virtual void MeleeStrike(float damage, float force)
 		{
 			var forward = Owner.EyeRot.Forward;
 			forward = forward.Normal;
 
-			foreach ( var tr in TraceBullet( Owner.EyePos, Owner.EyePos + forward * MeleeDistance, 10f ) )
+			foreach (var tr in TraceBullet(Owner.EyePos, Owner.EyePos + forward * MeleeDistance, 10f))
 			{
-				if ( !tr.Entity.IsValid() ) continue;
+				if (!tr.Entity.IsValid()) continue;
 
-				tr.Surface.DoBulletImpact( tr );
+				tr.Surface.DoBulletImpact(tr);
 
-				if ( !IsServer ) continue;
+				if (!IsServer) continue;
 
-				using ( Prediction.Off() )
+				using (Prediction.Off())
 				{
-					var damageInfo = DamageInfo.FromBullet( tr.EndPos, forward * 100 * force, damage )
-						.UsingTraceResult( tr )
-						.WithAttacker( Owner )
-						.WithWeapon( this );
+					var damageInfo = DamageInfo.FromBullet(tr.EndPos, forward * 100 * force, damage)
+						.UsingTraceResult(tr)
+						.WithAttacker(Owner)
+						.WithWeapon(this);
 
-					tr.Entity.TakeDamage( damageInfo );
+					tr.Entity.TakeDamage(damageInfo);
 				}
 			}
 		}
@@ -58,15 +58,15 @@ namespace HiddenGamemode
 		public override void AttackPrimary()
 		{
 			ShootEffects();
-			PlaySound( "rust_boneknife.attack" );
-			MeleeStrike( BaseDamage, 1.5f );
+			PlaySound("rust_boneknife.attack");
+			MeleeStrike(BaseDamage, 1.5f);
 		}
 
 		public override void OnChargeAttackFinish()
 		{
 			ShootEffects();
-			PlaySound( "rust_boneknife.attack" );
-			MeleeStrike( BaseDamage * 3f, 1.5f );
+			PlaySound("rust_boneknife.attack");
+			MeleeStrike(BaseDamage * 3f, 1.5f);
 		}
 	}
 }

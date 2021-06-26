@@ -1,9 +1,9 @@
 ﻿using Sandbox;
 using System;
 
-namespace HiddenGamemode
+namespace MurderboxGamemode
 {
-	[Library( "hdn_pistol", Title = "Baretta" )]
+	[Library("hdn_pistol", Title = "Baretta")]
 	partial class Pistol : Weapon
 	{
 		public override string ViewModelPath => "weapons/rust_pistol/v_rust_pistol.vmdl";
@@ -21,25 +21,25 @@ namespace HiddenGamemode
 		{
 			base.Spawn();
 
-			SetModel( "weapons/rust_pistol/rust_pistol.vmdl" );
+			SetModel("weapons/rust_pistol/rust_pistol.vmdl");
 		}
 
 		public override bool CanPrimaryAttack()
 		{
-			return base.CanPrimaryAttack() && Input.Pressed( InputButton.Attack1 );
+			return base.CanPrimaryAttack() && Input.Pressed(InputButton.Attack1);
 		}
 
 		public override void AttackPrimary()
 		{
-			if ( !TakeAmmo( 1 ) )
+			if (!TakeAmmo(1))
 			{
-				PlaySound( "pistol.dryfire" );
+				PlaySound("pistol.dryfire");
 				return;
 			}
 
 			ShootEffects();
-			PlaySound( "rust_pistol.shoot" );
-			ShootBullet( 0.05f, 1.5f, BaseDamage, 3.0f );
+			PlaySound("rust_pistol.shoot");
+			ShootBullet(0.05f, 1.5f, BaseDamage, 3.0f);
 		}
 	}
 }
