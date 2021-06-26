@@ -1,3 +1,7 @@
 - Work on the Clue Entity 
     - code/entity/Clue.cs - There needs to be 4 randomly in the map and when you collect one that one disappears and if you collect all four some shit happens.
     - config/murderbox.fgd - Add the entity for clues.
+
+Give Random Names
+
+Make the Teamname hidden to bystanders
