@@ -198,7 +198,7 @@ namespace MurderboxGamemode
 				.HitLayer(CollisionLayer.Debris)
 				.Ignore(ActiveChild)
 				.Ignore(this)
-				.Radius(2);
+				.Radius(2)
 				.Run();
 
 			if (trace.Hit && trace.Entity is PlayerCorpse corpse && corpse.Player != null)

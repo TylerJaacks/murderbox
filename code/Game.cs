@@ -101,7 +101,7 @@ namespace MurderboxGamemode
             if (client.Pawn.LifeState == LifeState.Alive && Round?.CanPlayerSuicide == true)
             {
                 client.Pawn.LifeState = LifeState.Dead;
-                client.Pawn.OnKilled()
+                client.Pawn.OnKilled();
                 OnKilled(client.Pawn);
             }
         }
