@@ -34,7 +34,7 @@ namespace MurderBoxGamemode
 			return base.Add(entity, makeActive);
 		}
 
-		public bool IsCarryingType( Type t )
+		public bool IsCarryingType(Type t)
 		{
 			return List.Any(x => x.GetType() == t);
 		}

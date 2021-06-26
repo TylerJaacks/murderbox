@@ -18,11 +18,11 @@ namespace MurderboxGamemode
 
 		public override void Simulate()
 		{
-			if ( Pawn is Player player )
+			if (Pawn is Player player)
 			{
 				var staminaLossPerSecond = StaminaLossPerSecond;
 
-				if ( player.Deployment == DeploymentType.IRIS_BRAWLER )
+				if (player.Deployment == DeploymentType.IRIS_BRAWLER)
 				{
 					MaxDefaultSpeed = 170f;
 					MaxWalkSpeed = 120f;
@@ -39,21 +39,21 @@ namespace MurderboxGamemode
 			_fallVelocity = Velocity.z;
 		}
 
-		public override void OnPostCategorizePosition( bool stayOnGround, TraceResult trace )
+		public override void OnPostCategorizePosition(bool stayOnGround, TraceResult trace)
 		{
-			if ( Host.IsServer && trace.Hit && _fallVelocity < -FallDamageVelocity )
+			if (Host.IsServer && trace.Hit && _fallVelocity < -FallDamageVelocity)
 			{
-				var damage = (MathF.Abs( _fallVelocity ) - FallDamageVelocity) * FallDamageScale;
+				var damage = (MathF.Abs(_fallVelocity) - FallDamageVelocity) * FallDamageScale;
 
-				using ( Prediction.Off() )
+				using (Prediction.Off())
 				{
 					var damageInfo = new DamageInfo()
-						.WithAttacker( Pawn )
-						.WithFlag( DamageFlags.Fall );
+						.WithAttacker(Pawn)
+						.WithFlag(DamageFlags.Fall);
 
 					damageInfo.Damage = damage;
 
-					Pawn.TakeDamage( damageInfo );
+					Pawn.TakeDamage(damageInfo);
 				}
 			}
 		}

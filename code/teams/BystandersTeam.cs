@@ -15,7 +15,7 @@ namespace MurderboxGamemode
 		private Battery _batteryHud;
 		private Radar _radarHud;
 
-		public override void SupplyLoadout(Player player )
+		public override void SupplyLoadout(Player player)
 		{
 			player.ClearAmmo();
 			player.Inventory.DeleteContents();
@@ -63,7 +63,7 @@ namespace MurderboxGamemode
 			player.GlowActive = false;
 		}
 
-		public override void OnLeave(Player player )
+		public override void OnLeave(Player player)
 		{
 			var client = player.GetClientOwner();
 

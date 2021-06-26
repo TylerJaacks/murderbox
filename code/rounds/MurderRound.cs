@@ -117,7 +117,7 @@ namespace MurderboxGamemode
 						player.Team.OnStart(player);
 					}
 
-					if ( player.Team.HasDeployments )
+					if (player.Team.HasDeployments)
 						OpenDeploymentCmd(To.Single(player), player.TeamIndex);
 				});
 
@@ -153,7 +153,7 @@ namespace MurderboxGamemode
 			base.OnTimeUp();
 		}
 
-        private void SupplyLoadouts( Player player )
+        private void SupplyLoadouts(Player player)
 		{
 			// Give everyone who is alive their starting loadouts.
 			if (player.Team != null && player.LifeState == LifeState.Alive)
@@ -175,13 +175,13 @@ namespace MurderboxGamemode
 			var murderer = Game.Instance.GetTeamPlayers<MurdererTeam>().FirstOrDefault();
 			var murderName = hidden != null ? murderer.GetClientOwner().Name : "";
 
-			Game.Instance.ChangeRound( new StatsRound
+			Game.Instance.ChangeRound(new StatsRound
 			{
 				MurdererName = murderName,
 				MurdererKills = _murdererKills,
 				FirstDeath = _firstDeath,
 				Winner = winner
-			} );
+			});
 		}
     }   
 }

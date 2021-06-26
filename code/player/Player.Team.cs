@@ -18,7 +18,7 @@ namespace MurderboxGamemode
 				// A player must be on a valid team.
 				if (value != null && value != _team)
 				{
-					_team?.Leave( his);
+					_team?.Leave(his);
 					_team = value;
 					_team.Join(this);
 

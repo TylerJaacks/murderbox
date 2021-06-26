@@ -64,7 +64,7 @@ namespace MurderBoxGamemode
 			}
 		}
 
-		public void MakeSpectator( Vector3 position = default )
+		public void MakeSpectator(Vector3 position = default)
 		{
 			EnableAllCollisions = false;
 			EnableDrawing = false;
@@ -89,7 +89,7 @@ namespace MurderBoxGamemode
 		{
 			base.OnKilled();
 
-			BecomeRagdollOnServer( _lastDamageInfo.Force, GetHitboxBone( _lastDamageInfo.HitboxIndex ) );
+			BecomeRagdollOnServer(_lastDamageInfo.Force, GetHitboxBone(_lastDamageInfo.HitboxIndex));
 
 			Inventory.DeleteContents();
 
@@ -136,7 +136,7 @@ namespace MurderBoxGamemode
 			}
 
 			var controller = GetActiveController();
-			controller?.Simulate( client, this, GetActiveAnimator() );
+			controller?.Simulate(client, this, GetActiveAnimator());
 		}
 
 		protected override void UseFail()
@@ -148,18 +148,18 @@ namespace MurderBoxGamemode
         // TODO: We also need to leave footprints behind.
 		public void ShowFootsteps(bool shouldShow)
 		{
-			// if ( _senseParticles != null )
+			// if (_senseParticles != null)
 			// {
-			// 	_senseParticles.Destroy( false );
+			// 	_senseParticles.Destroy(false);
 			// 	_senseParticles = null;
 			// }
 
-			// if ( shouldShow )
+			// if (shouldShow)
 			// {
-			// 	_senseParticles = Particles.Create( "particles/sense.vpcf" );
+			// 	_senseParticles = Particles.Create("particles/sense.vpcf");
 
-			// 	if ( _senseParticles != null )
-			// 		_senseParticles.SetEntity( 0, this, true );
+			// 	if (_senseParticles != null)
+			// 		_senseParticles.SetEntity(0, this, true);
 			// }
 		}
 
@@ -207,8 +207,8 @@ namespace MurderBoxGamemode
 				{
 					_ragdollBody = trace.Body;
 					_ragdollWeld = PhysicsJoint.Weld
-						.From(PhysicsBody, PhysicsBody.Transform.PointToLocal(EyePos + EyeRot.Forward * 40f ) )
-						.To(trace.Body, trace.Body.Transform.PointToLocal(trace.EndPos ))
+						.From(PhysicsBody, PhysicsBody.Transform.PointToLocal(EyePos + EyeRot.Forward * 40f))
+						.To(trace.Body, trace.Body.Transform.PointToLocal(trace.EndPos))
 						.WithLinearSpring(20f, 1f, 0.0f)
 						.WithAngularSpring(0.0f, 0.0f, 0.0f)
 						.Create();
@@ -234,8 +234,8 @@ namespace MurderBoxGamemode
 
 					/*
 					PhysicsJoint.Weld
-						.From( trace.Body, trace.Body.Transform.PointToLocal( trace.EndPos ) )
-						.To( _ragdollBody, _ragdollBody.Transform.PointToLocal( trace.EndPos ) )
+						.From(trace.Body, trace.Body.Transform.PointToLocal(trace.EndPos))
+						.To(_ragdollBody, _ragdollBody.Transform.PointToLocal(trace.EndPos))
 						.Create();
 					*/
 				}
@@ -273,7 +273,7 @@ namespace MurderBoxGamemode
 			camera.FieldOfView += _FOV;
 		}
 
-		public override void TakeDamage( DamageInfo info)
+		public override void TakeDamage(DamageInfo info)
 		{
 			if (info.HitboxIndex == 0)
 			{
@@ -294,11 +294,11 @@ namespace MurderBoxGamemode
 			{
 				PlaySound("fall");
 			}
-			else if (info.Flags.HasFlag( DamageFlags.Bullet))
+			else if (info.Flags.HasFlag(DamageFlags.Bullet))
 			{
 				if (!Team?.PlayPainSounds(this) == false)
 				{
-					PlaySound("grunt" + Rand.Int( 1, 4));
+					PlaySound("grunt" + Rand.Int(1, 4));
 				}
 			}
 

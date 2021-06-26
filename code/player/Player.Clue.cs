@@ -28,7 +28,7 @@ namespace MurderboxGamemode
 		{
 			get
 			{
-				if ( IsLocalPawn )
+				if (IsLocalPawn)
 					return (HasFlashlightEntity && _viewFlashlight.Enabled);
 
 				return (HasFlashlightEntity && _worldFlashlight.Enabled);
@@ -37,35 +37,35 @@ namespace MurderboxGamemode
 
 		public void ToggleFlashlight()
 		{
-			ShowFlashlight( !IsFlashlightOn );
+			ShowFlashlight(!IsFlashlightOn);
 		}
 
-		public void ShowFlashlight( bool shouldShow, bool playSounds = true )
+		public void ShowFlashlight(bool shouldShow, bool playSounds = true)
 		{
-			if ( IsFlashlightOn )
+			if (IsFlashlightOn)
 			{
-				if ( IsServer )
+				if (IsServer)
 					_worldFlashlight.Enabled = false;
 				else
 					_viewFlashlight.Enabled = false;
 			}
 
-			if ( IsServer && IsFlashlightOn != shouldShow )
-				ShowFlashlightLocal( To.Single( this ), shouldShow );
+			if (IsServer && IsFlashlightOn != shouldShow)
+				ShowFlashlightLocal(To.Single(this), shouldShow);
 
-			if ( ActiveChild is not Weapon weapon || !weapon.HasFlashlight )
+			if (ActiveChild is not Weapon weapon || !weapon.HasFlashlight)
 				return;
 
-			if ( shouldShow )
+			if (shouldShow)
 			{
-				if ( !HasFlashlightEntity )
+				if (!HasFlashlightEntity)
 				{
-					if ( IsServer )
+					if (IsServer)
 					{
 						_worldFlashlight = new Flashlight();
 						_worldFlashlight.EnableHideInFirstPerson = true;
 						_worldFlashlight.LocalRotation = EyeRot;
-						_worldFlashlight.SetParent( weapon, "muzzle" );
+						_worldFlashlight.SetParent(weapon, "muzzle");
 						_worldFlashlight.LocalPosition = Vector3.Zero;
 					}
 					else
@@ -78,12 +78,12 @@ namespace MurderboxGamemode
 				}
 				else
 				{
-					if ( IsServer )
+					if (IsServer)
 					{
 						// TODO: This is a weird hack to make sure the rotation is right.
-						_worldFlashlight.SetParent( null );
+						_worldFlashlight.SetParent(null);
 						_worldFlashlight.LocalRotation = EyeRot;
-						_worldFlashlight.SetParent( weapon, "muzzle" );
+						_worldFlashlight.SetParent(weapon, "muzzle");
 						_worldFlashlight.LocalPosition = Vector3.Zero;
 						_worldFlashlight.Enabled = true;
 					}
@@ -93,87 +93,87 @@ namespace MurderboxGamemode
 					}
 				}
 
-				if ( IsServer )
+				if (IsServer)
 				{
 					_worldFlashlight.FogStength = 10f;
-					_worldFlashlight.UpdateFromBattery( FlashlightBattery );
+					_worldFlashlight.UpdateFromBattery(FlashlightBattery);
 					_worldFlashlight.Reset();
 				}
 				else
 				{
 					_viewFlashlight.FogStength = 10f;
-					_viewFlashlight.UpdateFromBattery( FlashlightBattery );
+					_viewFlashlight.UpdateFromBattery(FlashlightBattery);
 					_viewFlashlight.Reset();
 				}
 
-				if ( IsServer && playSounds )
-					PlaySound( "flashlight-on" );
+				if (IsServer && playSounds)
+					PlaySound("flashlight-on");
 			}
-			else if ( IsServer && playSounds )
+			else if (IsServer && playSounds)
 			{
-				PlaySound( "flashlight-off" );
+				PlaySound("flashlight-off");
 			}
 		}
 
 		[ClientRpc]
-		private void ShowFlashlightLocal( bool shouldShow )
+		private void ShowFlashlightLocal(bool shouldShow)
 		{
-			ShowFlashlight( shouldShow );
+			ShowFlashlight(shouldShow);
 		}
 
 		private void TickFlashlight()
 		{
-			if ( Input.Released(InputButton.Flashlight) )
+			if (Input.Released(InputButton.Flashlight))
 			{
-				using ( Prediction.Off() )
+				using (Prediction.Off())
 					ToggleFlashlight();
 			}
 
-			if ( IsFlashlightOn )
+			if (IsFlashlightOn)
 			{
-				FlashlightBattery = MathF.Max( FlashlightBattery - 10f * Time.Delta, 0f );
+				FlashlightBattery = MathF.Max(FlashlightBattery - 10f * Time.Delta, 0f);
 
-				using ( Prediction.Off() )
+				using (Prediction.Off())
 				{
-					if ( IsServer )
+					if (IsServer)
 					{
-						var shouldTurnOff = _worldFlashlight.UpdateFromBattery( FlashlightBattery );
+						var shouldTurnOff = _worldFlashlight.UpdateFromBattery(FlashlightBattery);
 
-						if ( shouldTurnOff )
-							ShowFlashlight( false, false );
+						if (shouldTurnOff)
+							ShowFlashlight(false, false);
 					}
 					else
 					{
 						var viewFlashlightParent = _viewFlashlight.Parent;
 
-						if ( ActiveChild is Weapon weapon && weapon.ViewModelEntity != null )
+						if (ActiveChild is Weapon weapon && weapon.ViewModelEntity != null)
 						{
-							if ( viewFlashlightParent != weapon.ViewModelEntity )
+							if (viewFlashlightParent != weapon.ViewModelEntity)
 							{
-								_viewFlashlight.SetParent( weapon.ViewModelEntity, "muzzle" );
+								_viewFlashlight.SetParent(weapon.ViewModelEntity, "muzzle");
 								_viewFlashlight.Rotation = EyeRot;
 								_viewFlashlight.LocalPosition = Vector3.Zero;
 							}
 						}
 						else
 						{
-							if ( viewFlashlightParent != null )
-								_viewFlashlight.SetParent( null );
+							if (viewFlashlightParent != null)
+								_viewFlashlight.SetParent(null);
 
 							_viewFlashlight.Rotation = EyeRot;
 							_viewFlashlight.Position = EyePos + EyeRot.Forward * 80f;
 						}
 
-						var shouldTurnOff = _viewFlashlight.UpdateFromBattery( FlashlightBattery );
+						var shouldTurnOff = _viewFlashlight.UpdateFromBattery(FlashlightBattery);
 
-						if ( shouldTurnOff )
-							ShowFlashlight( false, false );
+						if (shouldTurnOff)
+							ShowFlashlight(false, false);
 					}
 				}
 			}
 			else
 			{
-				FlashlightBattery = MathF.Min( FlashlightBattery + 15f * Time.Delta, 100f );
+				FlashlightBattery = MathF.Min(FlashlightBattery + 15f * Time.Delta, 100f);
 			}
 		}
 	}

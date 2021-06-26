@@ -36,13 +36,13 @@ namespace MurderBoxGamemode
             
         }
 
-        [Input( Name = "DoSomething", Help = "Help text for input" )]
+        [Input(Name = "DoSomething", Help = "Help text for input")]
         public void SomeInput()
         {
 
         }
 
-        [Sandbox.Internal.Description( "Fires when something happens" )]
+        [Sandbox.Internal.Description("Fires when something happens")]
         public Output OnSomethingHappened;
 
         public static void MakeItDoSomething(SomeEntity ent)
