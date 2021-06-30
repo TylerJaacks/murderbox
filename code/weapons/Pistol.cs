@@ -8,15 +8,15 @@ namespace MurderboxGamemode
 	{
 		public override string ViewModelPath => "weapons/rust_pistol/v_rust_pistol.vmdl";
 
-		public override bool UnlimitedAmmo => true;
-		public override int ClipSize => 10;
+		public override bool UnlimitedAmmo => false;
+		public override int ClipSize => 1;
 		public override float PrimaryRate => 15.0f;
 		public override float SecondaryRate => 1.0f;
 		public override float ReloadTime => 3.0f;
 		public override bool HasLaserDot => true;
 		public override int BaseDamage => 8;
 		public override int Bucket => 1;
-
+		
 		public override void Spawn()
 		{
 			base.Spawn();

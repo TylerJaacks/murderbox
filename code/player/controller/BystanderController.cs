@@ -14,6 +14,8 @@ namespace MurderboxGamemode
 		public float MaxDefaultSpeed = 190f;
 		public float MaxWalkSpeed = 150f;
 
+		public List<ClueEntity> clues = new List<ClueEntity>();
+
 		private float _fallVelocity;
 
 		public override void Simulate()

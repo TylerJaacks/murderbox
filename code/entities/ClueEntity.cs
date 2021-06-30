@@ -30,24 +30,14 @@ namespace MurderboxGamemode
         [Sandbox.Internal.DefaultValue(-1)]
         public int ClueId { get; set; } = -1;
 
-        [Input]
-        public void DoSomethingElse(string str)
+        // TODO: Figure out how to manage the state per player i.e. if one player picks up a clue it only effects them.
+        // When the Bystander touches this entity add it to the there list of clues and remove it from there game.
+        [Sandbox.Internal.Description("OnStartTouch Event")]
+        public Output OnStartTouch;
+
+        public static void FireOnStartTouchEvent(SomeEntity ent)
         {
-            
-        }
-
-        [Input(Name = "DoSomething", Help = "Help text for input")]
-        public void SomeInput()
-        {
-
-        }
-
-        [Sandbox.Internal.Description("Fires when something happens")]
-        public Output OnSomethingHappened;
-
-        public static void MakeItDoSomething(SomeEntity ent)
-        {
-            ent.FireOutput("OnSomethingHappened", null);
+            ent.FireOutput("OnStartTouch", ent);
         }
     }
 }
