@@ -16,6 +16,8 @@ namespace MurderboxGamemode
 		private float _lean = 0;
 		private float _FOV = 0;
 		private bool _hasGun { get; set; } = false;
+		public List<ClueEntity> clues = new List<ClueEntity>();
+
 
         public bool HasTeam
 		{

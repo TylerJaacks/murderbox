@@ -121,7 +121,6 @@ namespace MurderboxGamemode
 						OpenDeploymentCmd(To.Single(player), player.TeamIndex);
 				});
 
-                // TODO: Not sure I need to do this.
 				foreach (var client in Client.All)
 				{
 					if (client.Pawn is Player player)
@@ -130,6 +129,20 @@ namespace MurderboxGamemode
 
                 _roundStarted = true;
 			}
+		}
+
+		protected override void OnTick()
+		{
+			// Check every tick of the round to see if any Bystanders have acquired all there clues.
+			Players.ForEach((player) =>
+			{
+				if (player != murderer || player.hasGun != true && player.clues.size() == 4)
+				{ 
+					player.ClearAmmo();
+					player.Inventory.DeleteContents();
+					player.Inventory.Add(new Knife(), true);
+				}
+			});
 		}
 
         protected override void OnFinish()

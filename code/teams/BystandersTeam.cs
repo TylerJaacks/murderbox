@@ -23,6 +23,7 @@ namespace MurderboxGamemode
             if (player._hasPistol) player.Inventory.Add(new Pistol(), true);
 		}
 
+        // TODO: Give Random Name to the Player.
 		public override void OnStart(Player player)
 		{
 			player.ClearAmmo();
@@ -44,7 +45,6 @@ namespace MurderboxGamemode
 			player.Camera = new FirstPersonCamera();
 		}
 
-        // TODO: Give Random Name to the Player.
 		public override void OnJoin(Player player)
 		{
 			var client = player.GetClientOwner();
