@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MurderboxGamemode
 {
-    public class Clue
+    public static class Clue
     {
         public int ClueId { get; set; }
         public String ClueModel { get; set; }
@@ -23,7 +23,7 @@ namespace MurderboxGamemode
         }
     }
 
-    public class ClueUtil
+    public static class ClueUtil
     {
         // TODO: Load these from the map/<map_name>/<map_name>.json
         public List<Clue> GetClues()

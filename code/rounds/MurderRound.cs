@@ -12,9 +12,7 @@ namespace MurderboxGamemode
         public override string RoundName => "MURDER";
         public override int RoundDuration => 300;
         public override bool CanPlayerSuicide => true;
-
         public List<Player> Spectators = new();
-
         private string _murderer;
         private string _firstDeath;
         private bool _isGameOver;
@@ -66,15 +64,6 @@ namespace MurderboxGamemode
         // TODO: Make sure the Player spawns at one of the spawn points.
         public override void OnPlayerSpawn(Player player)
 		{
-			// player.MakeSpectator();
-
-			// Spectators.Add(player);
-			// Players.Remove(player);
-
-			// base.OnPlayerSpawn(player);
-
-			if (Players.Contains(player)) return;
-
 			AddPlayer(player);
 
 			if (_roundStarted)
@@ -91,10 +80,20 @@ namespace MurderboxGamemode
 
         protected override void OnStart()
 		{
+			// TODO: Get the map name.
+			string mapName = "mb_demo1";
+
+			// Spawns the clues at the points defined in the map's json file.
+			foreach (Clue clue in SpawnUtil.GetClueSpawnPoints(mapName))
+			{				
+				SpawnUtil.SpawnClue(clue);
+			}
+
 			Log.Info("Started Murder Round");
 
 			if (Host.IsServer)
 			{
+				// Set the murderer and the bystander that spawns with a gun.
 				var murderer = Players[Rand.Int(Players.Count - 1)];
                 var bystanderWithGun = Players[Rand.Int(Players.Count - 1)];
 

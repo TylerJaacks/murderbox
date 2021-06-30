@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace MurderboxGamemode
 {
-    public class SpawnUtil
+    public static class SpawnUtil
     {
-        List<Vector3> GetSpawnPoints(String MapName)
+        static List<Vector3> GetSpawnPoints(String MapName)
         {
             var mapJson = JSON.Parse(jsonFileString);
 
@@ -31,7 +31,7 @@ namespace MurderboxGamemode
             return spawnList;
         }
 
-        List<Clue> GetClueSpawnPoints(String MapName)
+        static List<Clue> GetClueSpawnPoints(String MapName)
         {
             var mapJson = JSON.Parse(jsonFileString);
 
@@ -66,6 +66,18 @@ namespace MurderboxGamemode
             }
 
             return spawnList;
+        }
+        
+        // TODO: Spawn the Clue Props
+        public static void SpawnClue(Clue clue)
+        {
+
+        }
+
+        // TODO: Spawn the Clue Props
+        public static void SpawnPlayer(Player player)
+        {
+
         }
     }
 }
