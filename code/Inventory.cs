@@ -1,6 +1,5 @@
 using Sandbox;
 using System;
-using System.Linq;
 
 namespace MurderboxGamemode
 {
@@ -39,4 +38,6 @@ namespace MurderboxGamemode
 			return List.Any(x => x.GetType() == t);
 		}
 	}
+
+
 }
