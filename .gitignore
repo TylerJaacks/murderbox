@@ -5,3 +5,4 @@ Properties
 codegen-*
 murderbox.csproj
 .intermediate
+code/.vs/Murderbox/DesignTimeBuild/.dtbcache.v2
