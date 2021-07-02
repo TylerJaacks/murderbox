@@ -9,7 +9,10 @@ namespace MurderboxGamemode
 {
     public static class SpawnUtil
     {
-        static List<Vector3> GetSpawnPoints(String MapName)
+        // TODO: Pretty sure we don't have this in scope but we will figure that out later.
+        string mapName = game.GetMap();
+
+        static List<Vector3> GetSpawnPoints()
         {
             var mapJson = JSON.Parse(jsonFileString);
 
@@ -31,7 +34,7 @@ namespace MurderboxGamemode
             return spawnList;
         }
 
-        static List<Clue> GetClueSpawnPoints(String MapName)
+        static List<Clue> GetClueSpawnPoints()
         {
             var mapJson = JSON.Parse(jsonFileString);
 
@@ -69,7 +72,7 @@ namespace MurderboxGamemode
         }
         
         // TODO: Spawn the Clue Props
-        public static void SpawnClue(List<ClueEntity> clues, ClueEntity clueEntity, string mapName)
+        public static void SpawnClue(List<ClueEntity> clues, ClueEntity clueEntity)
         {
             List<Vector3> spawnLocations = GetClueSpawnPoints(mapName);
 
@@ -87,7 +90,7 @@ namespace MurderboxGamemode
         }
 
         // TODO: Spawn the Clue Props
-        public static void SpawnPlayer(List<Player> players, Player player, string mapName)
+        public static void SpawnPlayer(List<Player> players, Player player)
         {
             List<Vector3> spawnLocations = GetSpawnPoints(mapName);
 
@@ -103,7 +106,7 @@ namespace MurderboxGamemode
             }
         }
 
-        public static bool isPlayerAtLocation(List<Player> players, Vector3 location) {
+        public static bool isPlayerAtLocation(List<Player> players) {
             foreach (Player player in players)
             {
                 // TODO: Actually get there location.
@@ -116,7 +119,7 @@ namespace MurderboxGamemode
             return false;
         }
 
-        public static bool isClueAtLocation(List<ClueEntity> clues, Vector3 location) {
+        public static bool isClueAtLocation(List<ClueEntity> clues) {
             foreach (ClueEntity clue in clues)
             {
                 // TODO: Actually get there location.
