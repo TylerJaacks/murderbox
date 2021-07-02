@@ -16,6 +16,7 @@ namespace MurderboxGamemode
 		private float _lean = 0;
 		private float _FOV = 0;
 		private bool _hasGun { get; set; } = false;
+		private bool _isMurderer { get; set; } = false;
 		private List<ClueEntity> _clues { get; set; } = new List<ClueEntity>();
 		private string _newName { get; set; } = false;
 
@@ -78,6 +79,7 @@ namespace MurderboxGamemode
 			};
 		}
 
+		// TODO: Spawn the Player at one of the given spawns in the spawn list.
 		public override void Respawn()
 		{
 			Game.Instance?.Round?.OnPlayerSpawn(this);
@@ -102,6 +104,15 @@ namespace MurderboxGamemode
 		{
 			SimulateActiveChild(client, ActiveChild);
 
+			// TODO: This might need to be in the Gamemode part.
+			foreach (ClueEntity clueEntity in _clues)
+			{
+				if (Player._isMurderer || Player._hasGun || Player._clues.contains(clueEntity))
+				{
+					// TODO: Don't render this entity for this player.
+				}
+			}
+
 			if (Input.ActiveChild != null)
 			{
 				ActiveChild = Input.ActiveChild;
@@ -122,7 +133,6 @@ namespace MurderboxGamemode
 				using (Prediction.Off())
 				{
 					TickPickupRagdoll();
-					UpdateLaserDot();
 				}
 			}
 
@@ -131,13 +141,8 @@ namespace MurderboxGamemode
 				Team.OnTick(this);
 			}
 
-            // TODO: Look at this and figure out if we actually need this or we need to modify it.
-			if (ActiveChild is Weapon weapon && !weapon.IsUsable() && weapon.TimeSincePrimaryAttack > 0.5f && weapon.TimeSinceSecondaryAttack > 0.5f)
-			{
-				// SwitchToBestWeapon();
-			}
-
 			var controller = GetActiveController();
+			
 			controller?.Simulate(client, this, GetActiveAnimator());
 		}
 

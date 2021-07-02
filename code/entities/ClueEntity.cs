@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace MurderboxGamemode
 {
     [Library("clue", Description = "Represents a Clue.")]
-    public partial class ClueEntity : Entity
+    public partial class ClueEntity : PhysicsBase
     {
         [Property(Name="is_picked_up", Title="Is Picked Up.")]
         [Sandbox.Internal.DefaultValue(false)]
@@ -30,14 +30,13 @@ namespace MurderboxGamemode
         [Sandbox.Internal.DefaultValue(-1)]
         public int ClueId { get; set; } = -1;
 
-        // TODO: Figure out how to manage the state per player i.e. if one player picks up a clue it only effects them.
-        // When the Bystander touches this entity add it to the there list of clues and remove it from there game.
-        [Sandbox.Internal.Description("OnStartTouch Event")]
-        public Output OnStartTouch;
-
-        public static void FireOnStartTouchEvent(SomeEntity ent)
+        // TODO: Get Documentation on this Function.
+        public override OnTouch(Player player)
         {
-            ent.FireOutput("OnStartTouch", ent);
+            if (!player._isMurderer || !player._hasGun)
+            {
+                player._clues.Add(this);
+            }
         }
     }
 }

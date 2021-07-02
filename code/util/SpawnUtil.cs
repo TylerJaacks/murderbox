@@ -69,15 +69,64 @@ namespace MurderboxGamemode
         }
         
         // TODO: Spawn the Clue Props
-        public static void SpawnClue(Clue clue)
+        public static void SpawnClue(List<ClueEntity> clues, ClueEntity clueEntity, string mapName)
         {
+            List<Vector3> spawnLocations = GetClueSpawnPoints(mapName);
 
+            foreach (Vector3 spawn in spawnLocations) 
+            {
+                if (isClueAtLocation(clues, location)) 
+                {
+                    continue;
+                } 
+                else 
+                {
+                    // TODO: Spawn ClueEntity at the location.
+                }
+            }
         }
 
         // TODO: Spawn the Clue Props
-        public static void SpawnPlayer(Player player)
+        public static void SpawnPlayer(List<Player> players, Player player, string mapName)
         {
+            List<Vector3> spawnLocations = GetSpawnPoints(mapName);
 
+            foreach (Vector3 spawn in spawnLocations) 
+            {
+                if (isPlayerAtLocation(players, location)) 
+                {
+                    continue;
+                } 
+                else {
+                    // TODO: Spawn Player at the location.
+                }
+            }
+        }
+
+        public static bool isPlayerAtLocation(List<Player> players, Vector3 location) {
+            foreach (Player player in players)
+            {
+                // TODO: Actually get there location.
+                Vector3 playersLocation = new Vector3(0, 0, 0);
+
+                // TODO: Do a proper equals.
+                if (playersLocation == location) return true;
+            }
+
+            return false;
+        }
+
+        public static bool isClueAtLocation(List<ClueEntity> clues, Vector3 location) {
+            foreach (ClueEntity clue in clues)
+            {
+                // TODO: Actually get there location.
+                Vector3 cluesLocation = new Vector3(0, 0, 0);
+
+                // TODO: Do a proper equals.
+                if (cluesLocation == location) return true;
+            }
+
+            return false;
         }
     }
 }

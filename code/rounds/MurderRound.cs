@@ -101,6 +101,7 @@ namespace MurderboxGamemode
                     bystanderWithGun = Players[Rand.Int(Players.Count - 1)];
                 }
 
+				murderer.isMurderer = true;
                 bystanderWithGun.hasGun = true;
 
                 Assert.NotNull(murderer);
