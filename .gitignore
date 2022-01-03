@@ -3,6 +3,5 @@ obj/
 code/accesslist.txt
 Properties
 codegen-*
-murderbox.csproj
+sbox-hidden.csproj
 .intermediate
-code/.vs/Murderbox/DesignTimeBuild/.dtbcache.v2

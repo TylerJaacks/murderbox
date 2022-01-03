@@ -1,8 +1,9 @@
+﻿
 using Sandbox;
 using Sandbox.UI;
 using Sandbox.UI.Construct;
 
-namespace MurderboxGamemode
+namespace HiddenGamemode
 {
 	public class Ammo : Panel
 	{
@@ -15,37 +16,37 @@ namespace MurderboxGamemode
 		public Ammo()
 		{
 			
-			TextContainer = Add.Panel("textContainer");
-			Weapon = TextContainer.Add.Label("100", "weapon");
-			Inventory = TextContainer.Add.Label("100", "inventory");
-			Icon = Add.Panel("icon");
+			TextContainer = Add.Panel( "textContainer" );
+			Weapon = TextContainer.Add.Label( "100", "weapon" );
+			Inventory = TextContainer.Add.Label( "100", "inventory" );
+			Icon = Add.Panel( "icon" );
 		}
 
 		public override void Tick()
 		{
 			var player = Local.Pawn;
-			if (player == null) return;
+			if ( player == null ) return;
 
 			var weapon = player.ActiveChild as Weapon;
 			var isValid = (weapon != null && !weapon.IsMelee);
 
-			SetClass("active", isValid);
+			SetClass( "active", isValid );
 			SetClass("low-ammo", weapon != null && weapon.AmmoClip < 3);
 
-			if (!isValid) return;
+			if ( !isValid ) return;
 
 			Weapon.Text = $"{weapon.AmmoClip}";
 
-			if (!weapon.UnlimitedAmmo)
+			if ( !weapon.UnlimitedAmmo )
 			{
 				var inv = weapon.AvailableAmmo();
 				Inventory.Text = $"/ {inv}";
-				Inventory.SetClass("active", inv >= 0);
+				Inventory.SetClass( "active", inv >= 0 );
 			}
 			else
 			{
 				Inventory.Text = $"/ ∞";
-				Inventory.SetClass("active", true);
+				Inventory.SetClass( "active", true );
 			}
 		}
 	}

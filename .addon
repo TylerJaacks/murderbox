@@ -1,20 +1,3 @@
-"name": "Murderbox",
-"version": "1.0",
-"sharedassets": "*.*",
-
-"depends": [
-	"base",
-	"citizen",
-	"rust"
-],
-
-//
-// Addons can contain multiple addons, describe them here
-//
-"gamemodes": [
-	{
-		"name": "murderbox",
-		"title": "Murderbox",
-		"description": "Murder from Garry's Mod but for S&Box."
-	}
-]
+{
+	"sharedassets": "*.*",
+}

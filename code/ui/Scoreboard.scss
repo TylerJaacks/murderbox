@@ -21,7 +21,7 @@
 	// Header
 	.scoreboard-header {
 		align-items: center;
-		background-image: url(/ui/hidden/scoreboard-header-bg.png);
+		background-image: url( /ui/hidden/scoreboard-header-bg.png );
 		background-size: 100%;
 		font-family: Lexend;
 		justify-content: center;
@@ -59,18 +59,18 @@
 			padding-left: 80px;
 
 			&.team_iris {
-				background-image: url(/ui/hidden/iris-bg.png);
+				background-image: url( /ui/hidden/iris-bg.png );
 
 				.teamIcon {
-					background-image: url(/ui/hidden/icon-iris.png);
+					background-image: url( /ui/hidden/icon-iris.png );
 				}
 			}
 
 			&.team_hidden {
-				background-image: url(/ui/hidden/hidden-bg.png);
+				background-image: url( /ui/hidden/hidden-bg.png );
 
 				.teamIcon {
-					background-image: url(/ui/hidden/icon-hidden.png);
+					background-image: url( /ui/hidden/icon-hidden.png );
 				}
 			}
 
@@ -87,7 +87,7 @@
 		.table-header {
 			align-items: center;
 			background-size: 100%;
-			background-image: url(/ui/hidden/table-header-bg.png);
+			background-image: url( /ui/hidden/table-header-bg.png );
 			color: #6C6C6C;
 			height: 44px;
 			padding-right: 40px;
@@ -103,7 +103,7 @@
 			.entry {
 				align-items: center;
 				background-size: 100%;
-				background-image: url(/ui/hidden/row-bg.png);
+				background-image: url( /ui/hidden/row-bg.png );
 				margin-bottom: 2px;
 				height: 40px;
 				padding-left: 16px;
@@ -116,7 +116,7 @@
 				}
 
 				&.me {
-					background-image: url(/ui/hidden/row-bg-me.png);
+					background-image: url( /ui/hidden/row-bg-me.png );
 				}
 			}
 		}

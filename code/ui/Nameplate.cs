@@ -5,16 +5,15 @@ using System.Collections.Generic;
 using System.Linq;
 using Sandbox;
 
-namespace MurderboxGamemode
+namespace HiddenGamemode
 {
 	public class Nameplate : Panel
 	{
 		public Label NameLabel;
 
-		public Nameplate(Player player)
+		public Nameplate( Player player )
 		{
-			var client = player.GetClientOwner();
-			NameLabel = Add.Label(client.Name);
+			NameLabel = Add.Label( player.Client.Name );
 		}
 	}
 }

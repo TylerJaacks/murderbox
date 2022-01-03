@@ -4,7 +4,7 @@ using Sandbox.UI;
 using Sandbox.UI.Construct;
 using System;
 
-namespace MurderboxGamemode
+namespace HiddenGamemode
 {
 	public struct StatInfo
 	{
@@ -22,25 +22,25 @@ namespace MurderboxGamemode
 
 		public Stats()
 		{
-			StyleSheet.Load("/ui/Stats.scss");
-			Container = Add.Panel("statsContainer");
-			Winner = Add.Label("Winner", "winner");
+			StyleSheet.Load( "/ui/Stats.scss" );
+			Container = Add.Panel( "statsContainer" );
+			Winner = Add.Label( "Winner", "winner" );
 		}
 
-		public void AddStat(StatInfo info)
+		public void AddStat( StatInfo info )
 		{
-			var panel = Container.Add.Panel("item");
-			panel.Add.Label(info.Title, "title");
+			var panel = Container.Add.Panel( "item" );
+			panel.Add.Label( info.Title, "title" );
 
-			panel.Add.Label(info.PlayerName, "playerName")
-				.AddClass(info.TeamClass);
+			panel.Add.Label( info.PlayerName, "playerName" )
+				.AddClass( info.TeamClass );
 
-			panel.Add.Label(info.Text, "text");
+			panel.Add.Label( info.Text, "text" );
 
-			panel.Add.Panel("icon")
-				.AddClass(info.ImageClass);
+			panel.Add.Panel( "icon" )
+				.AddClass( info.ImageClass );
 
-			panel.AddClass(info.TeamClass);
+			panel.AddClass( info.TeamClass );
 		}
 	}
 }

@@ -16,4 +16,3 @@ Credits
 - https://github.com/Facepunch/dm98
 - https://github.com/Facepunch/sbox-hidden
 - https://github.com/zanders3/json
-

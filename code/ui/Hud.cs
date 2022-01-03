@@ -5,17 +5,17 @@ using Sandbox.UI.Construct;
 using System;
 using System.Threading.Tasks;
 
-namespace MurderboxGamemode
+namespace HiddenGamemode
 {
 	[Library]
 	public partial class Hud : HudEntity<RootPanel>
 	{
 		public Hud()
 		{
-			if (!IsClient)
+			if ( !IsClient )
 				return;
 
-			RootPanel.StyleSheet.Load("/ui/Hud.scss");
+			RootPanel.StyleSheet.Load( "/ui/Hud.scss" );
 
 			RootPanel.AddChild<RoundInfo>();
 			RootPanel.AddChild<Vitals>();

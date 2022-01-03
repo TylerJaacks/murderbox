@@ -1,13 +1,13 @@
-using Sandbox;
+﻿using Sandbox;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MurderboxGamemode
+namespace HiddenGamemode
 {
-    public abstract partial class BaseRound : NetworkComponent
+    public abstract partial class BaseRound : BaseNetworkable
 	{
 		public virtual int RoundDuration => 0;
 		public virtual string RoundName => "";
@@ -30,7 +30,7 @@ namespace MurderboxGamemode
 
 		public void Start()
 		{
-			if (Host.IsServer && RoundDuration > 0)
+			if ( Host.IsServer && RoundDuration > 0 )
 			{
 				RoundEndTime = Sandbox.Time.Now + RoundDuration;
 			}
@@ -40,7 +40,7 @@ namespace MurderboxGamemode
 
 		public void Finish()
 		{
-			if (Host.IsServer)
+			if ( Host.IsServer )
 			{
 				RoundEndTime = 0f;
 				Players.Clear();
@@ -49,39 +49,39 @@ namespace MurderboxGamemode
 			OnFinish();
 		}
 
-		public void AddPlayer(Player player)
+		public void AddPlayer( Player player )
 		{
 			Host.AssertServer();
 
-			if (!Players.Contains(player))
+			if ( !Players.Contains(player) )
 			{
-				Players.Add(player);
+				Players.Add( player );
 			}
 		}
 
-		public virtual void OnPlayerSpawn(Player player) { }
+		public virtual void OnPlayerSpawn( Player player ) { }
 
-		public virtual void OnPlayerKilled(Player player) { }
+		public virtual void OnPlayerKilled( Player player ) { }
 
-		public virtual void OnPlayerLeave(Player player)
+		public virtual void OnPlayerLeave( Player player )
 		{
-			Players.Remove(player);
+			Players.Remove( player );
 		}
 
 		public virtual void OnTick() { }
 
 		public virtual void OnSecond()
 		{
-			if (Host.IsServer)
+			if ( Host.IsServer )
 			{
-				if (RoundEndTime > 0 && Sandbox.Time.Now >= RoundEndTime)
+				if ( RoundEndTime > 0 && Sandbox.Time.Now >= RoundEndTime )
 				{
 					RoundEndTime = 0f;
 					OnTimeUp();
 				}
 				else
 				{
-					TimeLeftFormatted = TimeSpan.FromSeconds(TimeLeft).ToString(@"mm\:ss");
+					TimeLeftFormatted = TimeSpan.FromSeconds( TimeLeft ).ToString( @"mm\:ss" );
 				}
 			}
 		}

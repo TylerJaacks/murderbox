@@ -1,19 +1,20 @@
-using Sandbox;
+﻿using Sandbox;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MurderboxGamemode
+namespace HiddenGamemode
 {
 	public partial class StatsRound : BaseRound
 	{
 		public override string RoundName => "STATS";
 		public override int RoundDuration => 10;
 
-		[Net] public string MurdererName { get; set; }
-		[Net] public int MurdererKills { get; set; }
+		[Net] public string HiddenName { get; set; }
+		[Net] public int HiddenKills { get; set; }
+		[Net] public string HiddenHunter { get; set; }
 		[Net] public string FirstDeath { get; set; }
 		[Net] public string Winner { get; set; }
 
@@ -21,62 +22,71 @@ namespace MurderboxGamemode
 
 		protected override void OnStart()
 		{
-			Log.Info("Started Stats Round");
+			Log.Info( "Started Stats Round" );
 
-			if (Host.IsClient)
+			if ( Host.IsClient )
 			{
 				_statsPanel = Local.Hud.AddChild<Stats>();
 
 				_statsPanel.Winner.Text = Winner;
 
-				_statsPanel.AddStat(new StatInfo
+				_statsPanel.AddStat( new StatInfo
 				{
-					Title = "Murderer Kills",
-					PlayerName = MurdererName,
+					Title = "Hidden Kills",
+					PlayerName = HiddenName,
 					ImageClass = "kills",
-					TeamClass = "team_murderer",
-					Text = MurdererKills.ToString()
-				});
+					TeamClass = "team_hidden",
+					Text = HiddenKills.ToString()
+				} );
 
-				_statsPanel.AddStat(new StatInfo
+				_statsPanel.AddStat( new StatInfo
+				{
+					Title = "Hidden Hunter",
+					PlayerName = !string.IsNullOrEmpty( HiddenHunter ) ? HiddenHunter : "N/A",
+					ImageClass = "hidden_killer",
+					TeamClass = "team_iris",
+					Text = ""
+				} );
+
+				_statsPanel.AddStat( new StatInfo
 				{
 					Title = "First Death",
-					PlayerName = !string.IsNullOrEmpty(FirstDeath) ? FirstDeath : "N/A",
+					PlayerName = !string.IsNullOrEmpty( FirstDeath ) ? FirstDeath : "N/A",
 					ImageClass = "first_death",
-					TeamClass = "team_bystanders",
+					TeamClass = "team_iris",
 					Text = ""
-				});
+				} );
 			}
 		}
 
 		protected override void OnFinish()
 		{
-			Log.Info("Finished Stats Round");
+			Log.Info( "Finished Stats Round" );
 
-			if (_statsPanel != null)
+			if ( _statsPanel != null )
 			{
-				_statsPanel.Delete();
+				_statsPanel.Delete( );
 			}
 		}
 
 		protected override void OnTimeUp()
 		{
-			Log.Info("Stats Time Up!");
+			Log.Info( "Stats Time Up!" );
 
-			Game.Instance.ChangeRound(new HideRound());
+			Game.Instance.ChangeRound( new HideRound() );
 
 			base.OnTimeUp();
 		}
 
-		public override void OnPlayerSpawn(Player player)
+		public override void OnPlayerSpawn( Player player )
 		{
-			if (Players.Contains(player)) return;
+			if ( Players.Contains( player ) ) return;
 
 			player.MakeSpectator();
 
-			AddPlayer(player);
+			AddPlayer( player );
 
-			base.OnPlayerSpawn(player);
+			base.OnPlayerSpawn( player );
 		}
 	}
 }

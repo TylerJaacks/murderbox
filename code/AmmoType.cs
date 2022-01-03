@@ -1,7 +1,8 @@
-namespace MurderboxGamemode
+﻿namespace HiddenGamemode
 {
 	public enum AmmoType
 	{
-		Pistol
+		Pistol,
+		Buckshot
 	}
 }

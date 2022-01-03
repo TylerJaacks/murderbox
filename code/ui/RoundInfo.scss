@@ -1,5 +1,5 @@
 ﻿.roundContainer {
-    background-image: url(/ui/hidden/top-bar-iris.png);
+    background-image: url( /ui/hidden/top-bar-iris.png );
     background-size: 100%;
     font-family: Lexend;
     display: flex;
@@ -52,7 +52,7 @@
 
     .icon {
         position: absolute;
-        background-image: url(/ui/hidden/icon-iris.png);
+        background-image: url( /ui/hidden/icon-iris.png );
         background-size: 100%;
         width: 64px;
         height: 64px;
@@ -82,11 +82,11 @@ roundInfo
 {
     .roundContainer
     {
-        background-image: url(/ui/hidden/top-bar-hidden.png);
+        background-image: url( /ui/hidden/top-bar-hidden.png );
 
         .icon
         {
-            background-image: url(/ui/hidden/icon-hidden.png);
+            background-image: url( /ui/hidden/icon-hidden.png );
         }
     }
 }

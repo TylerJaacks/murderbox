@@ -3,7 +3,7 @@ using Sandbox;
 using Sandbox.UI;
 using Sandbox.UI.Construct;
 
-namespace MurderboxGamemode
+namespace HiddenGamemode
 {
 	public class Health : Panel
 	{
@@ -14,22 +14,22 @@ namespace MurderboxGamemode
 
 		public Health()
 		{
-			StyleSheet.Load("/ui/Health.scss");
+			StyleSheet.Load( "/ui/Health.scss" );
 
-			Icon = Add.Panel("icon");
-			OuterBar = Add.Panel("outerBar");
-			InnerBar = OuterBar.Add.Panel("innerBar");
-			Text = Add.Label("0", "text");
+			Icon = Add.Panel( "icon" );
+			OuterBar = Add.Panel( "outerBar" );
+			InnerBar = OuterBar.Add.Panel( "innerBar" );
+			Text = Add.Label( "0", "text" );
 		}
 
 		public override void Tick()
 		{
-			if (Local.Pawn is not Player player) return;
+			if ( Local.Pawn is not Player player ) return;
 
-			SetClass("hidden", player.LifeState != LifeState.Alive);
+			SetClass( "hidden", player.LifeState != LifeState.Alive );
 			SetClass("low-health", player.Health < 30);
 
-			InnerBar.Style.Width = Length.Percent(player.Health);
+			InnerBar.Style.Width = Length.Percent( player.Health );
 			InnerBar.Style.Dirty();
 			
 

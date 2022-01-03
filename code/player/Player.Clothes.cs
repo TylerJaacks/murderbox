@@ -1,29 +1,29 @@
-using Sandbox;
+﻿using Sandbox;
 using System.Collections.Generic;
 
-namespace MurderboxGamemode
+namespace HiddenGamemode
 {
 	partial class Player
 	{
 		List<ModelEntity> Clothing = new();
 
-		public ModelEntity AttachClothing(string modelName)
+		public ModelEntity AttachClothing( string modelName )
 		{
 			var entity = new ModelEntity();
 
-			entity.SetModel(modelName);
-			entity.SetParent(this, true);
+			entity.SetModel( modelName );
+			entity.SetParent( this, true );
 			entity.EnableShadowInFirstPerson = true;
 			entity.EnableHideInFirstPerson = true;
 
-			Clothing.Add(entity);
+			Clothing.Add( entity );
 
 			return entity;
 		}
 
 		public void RemoveClothing()
 		{
-			Clothing.ForEach((entity) => entity.Delete());
+			Clothing.ForEach( ( entity ) => entity.Delete() );
 			Clothing.Clear();
 		}
 	}

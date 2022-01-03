@@ -1,10 +1,8 @@
 ﻿
 using Sandbox;
 using Sandbox.UI;
-using Sandbox.UI.Construct;
-using System;
 
-namespace MurderboxGamemode
+namespace HiddenGamemode
 {
 	public class Crosshair : Panel
 	{
@@ -16,58 +14,53 @@ namespace MurderboxGamemode
 
 		public Crosshair()
 		{
-			StyleSheet.Load("/ui/Crosshair.scss");
+			StyleSheet.Load( "/ui/Crosshair.scss" );
 
-			for (int i = 0; i < 5; i++)
+			for ( int i = 0; i < 5; i++ )
 			{
-				var p = Add.Panel("element");
-				p.AddClass($"el{i}");
+				var p = Add.Panel( "element" );
+				p.AddClass( $"el{i}" );
 			}
 
-			Charge = Add.Panel("charge");
-			ChargeBackgroundBar = Charge.Add.Panel("background");
-			ChargeForegroundBar = ChargeBackgroundBar.Add.Panel("foreground");
+			Charge = Add.Panel( "charge" );
+			ChargeBackgroundBar = Charge.Add.Panel( "background" );
+			ChargeForegroundBar = ChargeBackgroundBar.Add.Panel( "foreground" );
 		}
 
-		// TODO: Update this
 		public override void Tick()
 		{
 			base.Tick();
 
-			if (Local.Pawn is not Player player)
+			if ( Local.Pawn is not Player player )
 				return;
 
-			Charge.SetClass("hidden", true);
+			Charge.SetClass( "hidden", true );
 
-			if (player.ActiveChild is Weapon weapon)
+			if ( player.ActiveChild is Weapon weapon )
 			{
-				if (weapon.ChargeAttackEndTime > 0f && Time.Now < weapon.ChargeAttackEndTime)
+				if ( weapon.ChargeAttackEndTime > 0f && Time.Now < weapon.ChargeAttackEndTime )
 				{
 					var timeLeft = weapon.ChargeAttackEndTime - Time.Now;
 
-					ChargeForegroundBar.Style.Width = Length.Percent(100f - ((100f / weapon.ChargeAttackDuration) * timeLeft));
+					ChargeForegroundBar.Style.Width = Length.Percent( 100f - ((100f / weapon.ChargeAttackDuration) * timeLeft) );
 					ChargeForegroundBar.Style.Dirty();
 
-					Charge.SetClass("hidden", false);
+					Charge.SetClass( "hidden", false );
 				}
 			}
 
 			this.PositionAtCrosshair();
 
-			SetClass("fire", _fireCounter > 0);
+			SetClass( "fire", _fireCounter > 0 );
 
-			if (_fireCounter > 0)
+			if ( _fireCounter > 0 )
 				_fireCounter--;
 		}
 
-		public override void OnEvent(string eventName)
+		[PanelEvent]
+		public void FireEvent()
 		{
-			if (eventName == "fire")
-			{
-				_fireCounter += 2;
-			}
-
-			base.OnEvent(eventName);
+			_fireCounter += 2;
 		}
 	}
 }

@@ -1,6 +1,6 @@
-using Sandbox;
+﻿using Sandbox;
 
-namespace MurderboxGamemode
+namespace HiddenGamemode
 {
 	public partial class SpectateCamera : Camera
 	{
@@ -23,37 +23,37 @@ namespace MurderboxGamemode
 
 		public override void Update()
 		{
-			if (Local.Pawn is not Player player)
+			if ( Local.Pawn is not Player player )
 				return;
 
-			if (TargetPlayer == null || !TargetPlayer.IsValid() || Input.Pressed(InputButton.Attack1))
+			if ( TargetPlayer == null || !TargetPlayer.IsValid() || Input.Pressed(InputButton.Attack1) )
 			{
 				var players = Game.Instance.GetTeamPlayers<IrisTeam>(true);
 
-				if (players != null && players.Count > 0)
+				if ( players != null && players.Count > 0 )
 				{
-					if (++_targetIdx >= players.Count)
+					if ( ++_targetIdx >= players.Count )
 						_targetIdx = 0;
 
 					TargetPlayer = players[_targetIdx];
 				}
 			}
 
-			_focusPoint = Vector3.Lerp(_focusPoint, GetSpectatePoint(), Time.Delta * 5.0f);
+			_focusPoint = Vector3.Lerp( _focusPoint, GetSpectatePoint(), Time.Delta * 5.0f );
 
-			Pos = _focusPoint + GetViewOffset();
-			Rot = player.EyeRot;
+			Position = _focusPoint + GetViewOffset();
+			Rotation = player.EyeRot;
 
-			FieldOfView = FieldOfView.LerpTo(50, Time.Delta * 3.0f);
+			FieldOfView = FieldOfView.LerpTo( 50, Time.Delta * 3.0f );
 			Viewer = null;
 		}
 
 		private Vector3 GetSpectatePoint()
 		{
-			if (Local.Pawn is not Player)
+			if ( Local.Pawn is not Player )
 				return DeathPosition;
 
-			if (TargetPlayer == null || !TargetPlayer.IsValid() || TimeSinceDied < 3)
+			if ( TargetPlayer == null || !TargetPlayer.IsValid() || TimeSinceDied < 3 )
 				return DeathPosition;
 
 			return TargetPlayer.EyePos;
@@ -61,7 +61,7 @@ namespace MurderboxGamemode
 
 		private Vector3 GetViewOffset()
 		{
-			if (Local.Pawn is not Player player)
+			if ( Local.Pawn is not Player player )
 				return Vector3.Zero;
 
 			return player.EyeRot.Forward * -150 + Vector3.Up * 10;

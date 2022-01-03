@@ -25,7 +25,7 @@
 
     .item
     {
-        background-image: url(/ui/green/box.png);
+        background-image: url( /ui/green/box.png );
         background-size: 100%;
         width: 300px;
         height: 300px;
@@ -60,13 +60,13 @@
 
             &.first_death
             {
-                background-image: url(/ui/icons/icon-death.png);
+                background-image: url( /ui/icons/icon-death.png );
                 background-size: 100%;
             }
 
             &.hidden_killer
             {
-                background-image: url(/ui/icons/icon-hunter.png);
+                background-image: url( /ui/icons/icon-hunter.png );
                 background-size: 100%;
             }
         }
@@ -81,7 +81,7 @@
     }
 }
 
-.team_bystanders
+.team_iris
 {
     .item
     {
@@ -94,11 +94,11 @@
     }
 }
 
-.team_murder
+.team_hidden
 {
     .item
     {
-        background-image: url(/ui/grayscale/box-gs.png);
+        background-image: url( /ui/grayscale/box-gs.png );
         font-family: Lexend;
     }
 

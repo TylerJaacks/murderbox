@@ -1,7 +1,7 @@
-using Sandbox;
+﻿using Sandbox;
 using System;
 
-namespace MurderboxGamemode
+namespace HiddenGamemode
 {
 	partial class Player
 	{
@@ -16,20 +16,17 @@ namespace MurderboxGamemode
 			set
 			{
 				// A player must be on a valid team.
-				if (value != null && value != _team)
+				if ( value != null && value != _team )
 				{
-					_team?.Leave(his);
+					_team?.Leave( this );
 					_team = value;
-					_team.Join(this);
+					_team.Join( this );
 
-					if (IsServer)
+					if ( IsServer )
 					{
 						TeamIndex = _team.Index;
 
-						var client = GetClientOwner();
-
-						// You have to do this for now.
-						client.SetScore("team", TeamIndex);
+						Client.SetInt("team", TeamIndex);
 					}
 				}
 			}

@@ -4,7 +4,7 @@ using Sandbox.UI.Construct;
 using System;
 using System.Threading.Tasks;
 
-namespace MurderboxGamemode
+namespace HiddenGamemode
 {
 	public partial class DamageIndicator : Panel
 	{
@@ -13,12 +13,12 @@ namespace MurderboxGamemode
 		public DamageIndicator()
 		{
 			Current = this;
-			StyleSheet.Load("/ui/DamageIndicator.scss");
+			StyleSheet.Load( "/ui/DamageIndicator.scss" );
 		}
 
-		public void OnHit(Vector3 pos)
+		public void OnHit( Vector3 pos )
 		{
-			var p = new HitPoint(pos);
+			var p = new HitPoint( pos );
 			p.Parent = this;
 		}
 
@@ -26,7 +26,7 @@ namespace MurderboxGamemode
 		{
 			public Vector3 Position;
 
-			public HitPoint(Vector3 pos)
+			public HitPoint( Vector3 pos )
 			{
 				Position = pos;
 
@@ -37,16 +37,16 @@ namespace MurderboxGamemode
 			{
 				base.Tick();
 
-				var wpos = CurrentView.Rotation.Inverse * (Position.WithZ(0) - CurrentView.Position.WithZ(0)).Normal;
-				wpos = wpos.WithZ(0).Normal;
+				var wpos = CurrentView.Rotation.Inverse * (Position.WithZ( 0 ) - CurrentView.Position.WithZ( 0 )).Normal;
+				wpos = wpos.WithZ( 0 ).Normal;
 
-				var angle = MathF.Atan2(wpos.y, -1.0f * wpos.x);
+				var angle = MathF.Atan2( wpos.y, -1.0f * wpos.x );
 
 				var pt = new PanelTransform();
 
-				pt.AddTranslateX(Length.Percent(-50.0f));
-				pt.AddTranslateY(Length.Percent(-50.0f));
-				pt.AddRotation(0, 0, angle.RadianToDegree());
+				pt.AddTranslateX( Length.Percent( -50.0f ) );
+				pt.AddTranslateY( Length.Percent( -50.0f ) );
+				pt.AddRotation( 0, 0, angle.RadianToDegree() );
 
 				Style.Transform = pt;
 				Style.Dirty();
@@ -54,9 +54,9 @@ namespace MurderboxGamemode
 
 			async Task Lifetime()
 			{
-				await Task.Delay(200);
-				AddClass("dying");
-				await Task.Delay(500);
+				await Task.Delay( 200 );
+				AddClass( "dying" );
+				await Task.Delay( 500 );
 				Delete();
 			}
 		}

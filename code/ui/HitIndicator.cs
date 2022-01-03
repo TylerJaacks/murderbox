@@ -4,7 +4,7 @@ using Sandbox.UI.Construct;
 using System;
 using System.Threading.Tasks;
 
-namespace MurderboxGamemode
+namespace HiddenGamemode
 {
 	public partial class HitIndicator : Panel
 	{
@@ -13,7 +13,7 @@ namespace MurderboxGamemode
 		public HitIndicator()
 		{
 			Current = this;
-			StyleSheet.Load("/ui/HitIndicator.scss");
+			StyleSheet.Load( "/ui/HitIndicator.scss" );
 		}
 
 		public override void Tick()
@@ -21,14 +21,14 @@ namespace MurderboxGamemode
 			base.Tick();
 		}
 
-		public void OnHit(Vector3 pos, float amount)
+		public void OnHit( Vector3 pos, float amount )
 		{
-			_ = new HitPoint(amount, pos, this);
+			_ = new HitPoint( amount, pos, this );
 		}
 
 		public class HitPoint : Panel
 		{
-			public HitPoint(float amount, Vector3 pos, Panel parent)
+			public HitPoint( float amount, Vector3 pos, Panel parent )
 			{
 				Parent = parent;
 				_ = Lifetime();
@@ -36,7 +36,7 @@ namespace MurderboxGamemode
 
 			async Task Lifetime()
 			{
-				await Task.Delay(200);
+				await Task.Delay( 200 );
 				Delete();
 			}
 		}

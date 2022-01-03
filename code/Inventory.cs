@@ -1,28 +1,29 @@
-using Sandbox;
+﻿using Sandbox;
 using System;
+using System.Linq;
 
-namespace MurderboxGamemode
+namespace HiddenGamemode
 {
 	partial class Inventory : BaseInventory
 	{
-		public Inventory (Player player) : base(player)
+		public Inventory( Player player ) : base( player )
 		{
 
 		}
 
-		public override bool Add(Entity entity, bool makeActive = false)
+		public override bool Add( Entity entity, bool makeActive = false )
 		{
 			var player = Owner as Player;
 			var weapon = entity as Weapon;
 
-			if (weapon != null && IsCarryingType(entity.GetType()))
+			if ( weapon != null && IsCarryingType( entity.GetType() ) )
 			{
 				var ammo = weapon.AmmoClip;
 				var ammoType = weapon.AmmoType;
 
-				if (ammo > 0)
+				if ( ammo > 0 )
 				{
-					player.GiveAmmo(ammoType, ammo);
+					player.GiveAmmo( ammoType, ammo );
 				}
 
 				entity.Delete();
@@ -30,14 +31,12 @@ namespace MurderboxGamemode
 				return false;
 			}
 
-			return base.Add(entity, makeActive);
+			return base.Add( entity, makeActive );
 		}
 
-		public bool IsCarryingType(Type t)
+		public bool IsCarryingType( Type t )
 		{
-			return List.Any(x => x.GetType() == t);
+			return List.Any( x => x.GetType() == t );
 		}
 	}
-
-
 }

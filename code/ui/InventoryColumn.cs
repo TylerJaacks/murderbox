@@ -6,7 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace MurderboxGamemode
+namespace HiddenGamemode
 {
 	public class InventoryColumn : Panel
 	{
@@ -17,35 +17,35 @@ namespace MurderboxGamemode
 
 		internal List<InventoryIcon> Icons = new();
 
-		public InventoryColumn(int i, Panel parent)
+		public InventoryColumn( int i, Panel parent )
 		{
 			Parent = parent;
 			Column = i;
-			Header = Add.Label($"{i + 1}", "slot-number");
+			Header = Add.Label( $"{i + 1}", "slot-number" );
 		}
 
-		internal void UpdateWeapon(Weapon weapon)
+		internal void UpdateWeapon( Weapon weapon )
 		{
-			var icon = ChildrenOfType<InventoryIcon>().FirstOrDefault(x => x.Weapon == weapon);
+			var icon = ChildrenOfType<InventoryIcon>().FirstOrDefault( x => x.Weapon == weapon );
 
-			if (icon == null)
+			if ( icon == null )
 			{
-				icon = new InventoryIcon(weapon)
+				icon = new InventoryIcon( weapon )
 				{
 					Parent = this
 				};
 
-				Icons.Add(icon);
+				Icons.Add( icon );
 			}
 		}
 
-		internal void TickSelection(Weapon selectedWeapon)
+		internal void TickSelection( Weapon selectedWeapon )
 		{
-			SetClass("active", selectedWeapon?.Bucket == Column);
+			SetClass( "active", selectedWeapon?.Bucket == Column );
 
-			for (int i = 0; i < Icons.Count; i++)
+			for ( int i = 0; i < Icons.Count; i++ )
 			{
-				Icons[i].TickSelection(selectedWeapon);
+				Icons[i].TickSelection( selectedWeapon );
 			}
 		}
 	}

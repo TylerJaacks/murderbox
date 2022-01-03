@@ -1,8 +1,8 @@
-using Sandbox;
+﻿using Sandbox;
 using System;
 using System.Collections.Generic;
 
-namespace MurderboxGamemode
+namespace HiddenGamemode
 {
 	partial class Player
 	{
@@ -14,46 +14,46 @@ namespace MurderboxGamemode
 			Ammo.Clear();
 		}
 
-		public int AmmoCount(AmmoType type)
+		public int AmmoCount( AmmoType type )
 		{
 			var iType = (int)type;
-			if (Ammo == null) return 0;
-			if (Ammo.Count <= iType) return 0;
+			if ( Ammo == null ) return 0;
+			if ( Ammo.Count <= iType ) return 0;
 			return Ammo[(int)type];
 		}
 
-		public bool SetAmmo(AmmoType type, int amount)
+		public bool SetAmmo( AmmoType type, int amount )
 		{
 			var iType = (int)type;
-			if (!Host.IsServer) return false;
-			if (Ammo == null) return false;
+			if ( !Host.IsServer ) return false;
+			if ( Ammo == null ) return false;
 
-			while (Ammo.Count <= iType)
+			while ( Ammo.Count <= iType )
 			{
-				Ammo.Add(0);
+				Ammo.Add( 0 );
 			}
 
 			Ammo[(int)type] = amount;
 			return true;
 		}
 
-		public bool GiveAmmo(AmmoType type, int amount)
+		public bool GiveAmmo( AmmoType type, int amount )
 		{
-			if (!Host.IsServer) return false;
-			if (Ammo == null) return false;
+			if ( !Host.IsServer ) return false;
+			if ( Ammo == null ) return false;
 
-			SetAmmo(type, AmmoCount(type) + amount);
+			SetAmmo( type, AmmoCount( type ) + amount );
 			return true;
 		}
 
-		public int TakeAmmo(AmmoType type, int amount)
+		public int TakeAmmo( AmmoType type, int amount )
 		{
-			if (Ammo == null) return 0;
+			if ( Ammo == null ) return 0;
 
-			var available = AmmoCount(type);
-			amount = Math.Min(available, amount);
+			var available = AmmoCount( type );
+			amount = Math.Min( available, amount );
 
-			SetAmmo(type, available - amount);
+			SetAmmo( type, available - amount );
 			return amount;
 		}
 	}
