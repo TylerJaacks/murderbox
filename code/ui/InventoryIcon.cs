@@ -1,36 +1,32 @@
-﻿
-using Sandbox;
+﻿using Sandbox;
 using Sandbox.UI;
-using Sandbox.UI.Construct;
-using System;
 
-namespace HiddenGamemode
+// ReSharper disable once CheckNamespace
+namespace MurderboxGamemode;
+
+class InventoryIcon : Panel
 {
-	class InventoryIcon : Panel
+	public Weapon Weapon;
+	public Panel Icon;
+
+	public InventoryIcon(Weapon weapon)
 	{
-		public Weapon Weapon;
-		public Panel Icon;
+		Weapon = weapon;
+		Icon = Add.Panel("icon");
+		AddClass(weapon.ClassInfo.Name);
+	}
 
-		public InventoryIcon( Weapon weapon )
-		{
-			Weapon = weapon;
-			Icon = Add.Panel( "icon" );
-			AddClass( weapon.ClassInfo.Name );
-		}
+	internal void TickSelection(Weapon selectedWeapon)
+	{
+		SetClass("active", selectedWeapon == Weapon);
+		SetClass("empty", !Weapon?.IsUsable() ?? true);
+	}
 
-		internal void TickSelection( Weapon selectedWeapon )
-		{
-			SetClass( "active", selectedWeapon == Weapon );
-			SetClass( "empty", !Weapon?.IsUsable() ?? true );
-		}
+	public override void Tick()
+	{
+		base.Tick();
 
-		public override void Tick()
-		{
-			base.Tick();
-
-			if ( !Weapon.IsValid() || Weapon.Owner != Local.Pawn )
-				Delete();
-		}
+		if (!Weapon.IsValid() || Weapon.Owner != Local.Pawn)
+			Delete();
 	}
 }
-

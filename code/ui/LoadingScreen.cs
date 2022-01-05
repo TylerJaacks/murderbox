@@ -1,10 +1,9 @@
-﻿
-using Sandbox;
+﻿using Sandbox;
 using Sandbox.UI;
 using Sandbox.UI.Construct;
-using System;
 
-namespace HiddenGamemode
+// ReSharper disable once CheckNamespace
+namespace MurderboxGamemode
 {
 	public class LoadingScreen : Panel
 	{

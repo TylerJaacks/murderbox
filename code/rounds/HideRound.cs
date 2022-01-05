@@ -1,148 +1,104 @@
-﻿using Sandbox;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
-namespace HiddenGamemode
+using Sandbox;
+
+// ReSharper disable once CheckNamespace
+namespace MurderboxGamemode;
+
+public partial class HideRound : BaseRound
 {
-	public partial class HideRound : BaseRound
+	[ServerVar("mb_host_always_hidden", Help = "Make the host always the hidden.")]
+	public static bool HostAlwaysHidden { get; set; } = false;
+
+	public override string RoundName => "PREPARE";
+	public override int RoundDuration => 20;
+
+	private bool _roundStarted;
+
+	public override void OnPlayerSpawn(Player player)
 	{
-		[ServerVar( "hdn_host_always_hidden", Help = "Make the host always the hidden." )]
-		public static bool HostAlwaysHidden { get; set; } = false;
+		if (Players.Contains(player)) return;
 
-		public override string RoundName => "PREPARE";
-		public override int RoundDuration => 20;
+		AddPlayer(player);
 
-		private Deployment _deploymentPanel;
-		private bool _roundStarted;
-
-		[ServerCmd( "hdn_select_deployment" )]
-		private static void SelectDeploymentCmd( string type )
+		if (_roundStarted)
 		{
-			if ( ConsoleSystem.Caller is Player player )
-			{
-				if ( Game.Instance.Round is HideRound )
-					player.Deployment = Enum.Parse<DeploymentType>( type );
-			}
+			player.Team = Game.Instance.BystandersTeam;
+			player.Team.OnStart(player);
 		}
 
-		[ClientCmd( "hdn_open_deployment", CanBeCalledFromServer = true) ]
-		private static void OpenDeploymentCmd( int teamIndex )
+		base.OnPlayerSpawn(player);
+	}
+
+	protected override void OnStart()
+	{
+		Log.Info("Started Hide Round");
+
+		if (Host.IsServer)
 		{
-			if ( Game.Instance.Round is HideRound round )
+			foreach (var client in Client.All)
 			{
-				round.OpenDeployment( Game.Instance.GetTeamByIndex( teamIndex ) );
-			}
-		}
-
-		public static void SelectDeployment( DeploymentType type )
-		{
-			if ( Local.Pawn is Player player )
-				player.Deployment = type;
-
-			SelectDeploymentCmd( type.ToString() );
-		}
-
-		public void OpenDeployment( BaseTeam team )
-		{
-			CloseDeploymentPanel();
-
-			_deploymentPanel = Local.Hud.AddChild<Deployment>();
-
-			team.AddDeployments( _deploymentPanel, (selection) =>
-			{
-				SelectDeployment( selection );
-				CloseDeploymentPanel();
-			} );
-		}
-
-		public override void OnPlayerSpawn( Player player )
-		{
-			if ( Players.Contains( player ) ) return;
-
-			AddPlayer( player );
-
-			if ( _roundStarted )
-			{
-				player.Team = Game.Instance.IrisTeam;
-				player.Team.OnStart( player );
-
-				if ( player.Team.HasDeployments )
-					OpenDeploymentCmd( To.Single( player ), player.TeamIndex );
+				if (client.Pawn is Player player)
+					player.Respawn();
 			}
 
-			base.OnPlayerSpawn( player );
-		}
+			if (Players.Count == 0) return;
 
-		protected override void OnStart()
-		{
-			Log.Info( "Started Hide Round" );
+			// Select a random Hidden player.
+			var murderer = Players[Rand.Int(Players.Count - 1)];
 
-			if ( Host.IsServer )
+			if (HostAlwaysHidden)
 			{
-				foreach ( var client in Client.All )
+				murderer = Players[0];
+			}
+
+			Log.Info( murderer.Client.Name  + " is the murderer." );
+
+			IList<Player> playersRemaining = new List<Player>();
+
+			Players.ForEach((player) =>
+			{
+				if ( player != murderer ) playersRemaining.Add(player);
+
+			});
+
+			var detective = playersRemaining[Rand.Int( playersRemaining.Count - 1 )];
+
+			Log.Info( detective.Client.Name + " is the detective." );
+
+			Assert.NotNull(murderer);
+
+			murderer.Team = Game.Instance.MurdererTeam;
+			murderer.Team.OnStart(murderer);
+
+			detective.Team = Game.Instance.DetectiveTeam;
+			detective.Team.OnStart(detective);
+
+			
+			Players.ForEach((player) =>
+			{
+				if (player != murderer && player != detective)
 				{
-					if ( client.Pawn is Player player )
-						player.Respawn();
+					player.Team = Game.Instance.BystandersTeam;
+					player.Team.OnStart(player);
 				}
+			});
 
-				if ( Players.Count == 0 ) return;
-
-				// Select a random Hidden player.
-				var hidden = Players[Rand.Int( Players.Count - 1 )];
-
-				if ( HostAlwaysHidden )
-				{
-					hidden = Players[0];
-				}
-
-				Assert.NotNull( hidden );
-
-				hidden.Team = Game.Instance.HiddenTeam;
-				hidden.Team.OnStart( hidden );
-
-				// Make everyone else I.R.I.S.
-				Players.ForEach( ( player ) =>
-				{
-					if ( player != hidden )
-					{
-						player.Team = Game.Instance.IrisTeam;
-						player.Team.OnStart( player );
-					}
-
-					if ( player.Team.HasDeployments )
-						OpenDeploymentCmd( To.Single( player ), player.TeamIndex );
-				} );
-
-				_roundStarted = true;
-			}
+			_roundStarted = true;
 		}
+	}
 
-		protected override void OnFinish()
-		{
-			Log.Info( "Finished Hide Round" );
+	protected override void OnFinish()
+	{
+		Log.Info("Finished Hide Round");
+	}
 
-			CloseDeploymentPanel();
-		}
+	protected override void OnTimeUp()
+	{
+		Log.Info("Hide Time Up!");
 
-		protected override void OnTimeUp()
-		{
-			Log.Info( "Hide Time Up!" );
+		Game.Instance.ChangeRound(new HuntRound());
 
-			Game.Instance.ChangeRound( new HuntRound() );
-
-			base.OnTimeUp();
-		}
-
-		private void CloseDeploymentPanel()
-		{
-			if ( _deploymentPanel != null )
-			{
-				_deploymentPanel.Delete();
-				_deploymentPanel = null;
-			}
-		}
+		base.OnTimeUp();
 	}
 }

@@ -5,63 +5,51 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HiddenGamemode
+namespace MurderboxGamemode;
+
+public partial class SenseAbility : BaseAbility
 {
-	public partial class SenseAbility : BaseAbility
+	public override float Cooldown => 10;
+	public override string Name => "Sense";
+
+	public override string GetKeybind()
 	{
-		public override float Cooldown => 10;
-		public override string Name => "Sense";
+		return Input.GetKeyWithBinding("iv_drop").ToUpper();
+	}
 
-		public override string GetKeybind()
+	protected override void OnUse(Player player)
+	{
+		Log.Info((Host.IsServer ? "Server: " : "Client: ") + "Time Since Last: " + TimeSinceLastUse);
+
+		TimeSinceLastUse = 0;
+
+		using (Prediction.Off())
 		{
-			return Input.GetKeyWithBinding( "iv_drop" ).ToUpper();
-		}
-
-		protected override void OnUse( Player player )
-		{
-			Log.Info( (Host.IsServer ? "Server: " : "Client: ") + "Time Since Last: " + TimeSinceLastUse );
-
-			TimeSinceLastUse = 0;
-
-			using ( Prediction.Off() )
+			if (Host.IsClient)
 			{
-				if ( Host.IsClient )
-				{
-					_ = StartGlowAbility();
-				}
-				else
-				{
-					player.PlaySound( $"i-see-you-{Rand.Int(1, 3)}" );
-				}
+				_ = StartGlowAbility();
+			}
+			else
+			{
+				player.PlaySound($"i-see-you-{Rand.Int(1, 3)}");
 			}
 		}
+	}
 
-		public override float GetCooldown( Player player )
+	private async Task StartGlowAbility()
+	{
+		var players = Game.Instance.GetTeamPlayers<BystandersTeam>(true);
+
+		players.ForEach((player) =>
 		{
-			if ( player.Deployment == DeploymentType.HIDDEN_BEAST )
-				return Cooldown * 0.5f;
-			else if ( player.Deployment == DeploymentType.HIDDEN_ROGUE )
-				return Cooldown * 2f;
+			player.ShowSenseParticles(true);
+		});
 
-			return base.GetCooldown( player );
-		}
+		await Task.Delay(TimeSpan.FromSeconds(Cooldown * 0.5f));
 
-		private async Task StartGlowAbility()
+		players.ForEach((player) =>
 		{
-			var players = Game.Instance.GetTeamPlayers<IrisTeam>( true );
-
-			players.ForEach( ( player ) =>
-			{
-				player.ShowSenseParticles( true );
-			} );
-
-			await Task.Delay( TimeSpan.FromSeconds( Cooldown * 0.5f ) );
-
-			players.ForEach( ( player ) =>
-			{
-				player.ShowSenseParticles( false );
-			} );
-		}
+			player.ShowSenseParticles(false);
+		});
 	}
 }
-

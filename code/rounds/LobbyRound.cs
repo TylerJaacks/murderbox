@@ -1,64 +1,62 @@
-﻿using Sandbox;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
-namespace HiddenGamemode
+using Sandbox;
+
+// ReSharper disable once CheckNamespace
+namespace MurderboxGamemode;
+
+public class LobbyRound : BaseRound
 {
-    public class LobbyRound : BaseRound
+	public override string RoundName => "LOBBY";
+
+	protected override void OnStart()
 	{
-		public override string RoundName => "LOBBY";
+		Log.Info("Started Lobby Round");
 
-		protected override void OnStart()
+		if (Host.IsServer)
 		{
-			Log.Info( "Started Lobby Round" );
-
-			if ( Host.IsServer )
+			foreach (var client in Client.All)
 			{
-				foreach ( var client in Client.All )
-				{
-					if ( client.Pawn is Player player )
-						player.Respawn();
-				}
+				if (client.Pawn is Player player)
+					player.Respawn();
 			}
 		}
+	}
 
-		protected override void OnFinish()
+	protected override void OnFinish()
+	{
+		Log.Info("Finished Lobby Round");
+	}
+
+	public override void OnPlayerKilled(Player player)
+	{
+		_ = StartRespawnTimer(player);
+
+		base.OnPlayerKilled(player);
+	}
+
+	private async Task StartRespawnTimer(Player player)
+	{
+		await Task.Delay(1000);
+
+		player.Respawn();
+	}
+
+	// TODO: Maybe Spawn Players With Hands.
+	public override void OnPlayerSpawn(Player player)
+	{
+		if (Players.Contains(player))
 		{
-			Log.Info( "Finished Lobby Round" );
+			player.Team.SupplyLoadout(player);
+			return;
 		}
 
-		public override void OnPlayerKilled( Player player )
-		{
-			_ = StartRespawnTimer( player );
+		AddPlayer(player);
 
-			base.OnPlayerKilled( player );
-		}
+		player.Team = Game.Instance.BystandersTeam;
+		player.Team.OnStart(player);
+		player.Team.SupplyLoadout(player);
 
-		private async Task StartRespawnTimer( Player player )
-		{
-			await Task.Delay( 1000 );
-
-			player.Respawn();
-		}
-
-		public override void OnPlayerSpawn( Player player )
-		{
-			if ( Players.Contains( player ) )
-			{
-				player.Team.SupplyLoadout( player );
-				return;
-			}
-
-			AddPlayer( player );
-
-			player.Team = Game.Instance.IrisTeam;
-			player.Team.OnStart( player );
-			player.Team.SupplyLoadout( player );
-
-			base.OnPlayerSpawn( player );
-		}
+		base.OnPlayerSpawn(player);
 	}
 }

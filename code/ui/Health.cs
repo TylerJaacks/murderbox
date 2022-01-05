@@ -1,9 +1,10 @@
-﻿
+﻿using System.Globalization;
 using Sandbox;
 using Sandbox.UI;
 using Sandbox.UI.Construct;
 
-namespace HiddenGamemode
+// ReSharper disable once CheckNamespace
+namespace MurderboxGamemode
 {
 	public class Health : Panel
 	{
@@ -33,7 +34,7 @@ namespace HiddenGamemode
 			InnerBar.Style.Dirty();
 			
 
-			Text.Text = player.Health.ToString();
+			Text.Text = player.Health.ToString( CultureInfo.CurrentCulture );
 		}
 	}
 }

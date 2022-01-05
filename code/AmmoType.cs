@@ -1,8 +1,7 @@
-﻿namespace HiddenGamemode
+﻿// ReSharper disable once CheckNamespace
+namespace MurderboxGamemode;
+
+public enum AmmoType
 {
-	public enum AmmoType
-	{
-		Pistol,
-		Buckshot
-	}
+	Pistol,
 }

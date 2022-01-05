@@ -1,66 +1,65 @@
-﻿
-using Sandbox;
+﻿using Sandbox;
 using Sandbox.UI;
 
-namespace HiddenGamemode
+// ReSharper disable once CheckNamespace
+namespace MurderboxGamemode;
+
+public class Crosshair : Panel
 {
-	public class Crosshair : Panel
+	public Panel ChargeBackgroundBar;
+	public Panel ChargeForegroundBar;
+	public Panel Charge;
+
+	private int _fireCounter;
+
+	public Crosshair()
 	{
-		public Panel ChargeBackgroundBar;
-		public Panel ChargeForegroundBar;
-		public Panel Charge;
+		StyleSheet.Load("/ui/Crosshair.scss");
 
-		private int _fireCounter;
-
-		public Crosshair()
+		for (int i = 0; i < 5; i++)
 		{
-			StyleSheet.Load( "/ui/Crosshair.scss" );
+			var p = Add.Panel("element");
+			p.AddClass($"el{i}");
+		}
 
-			for ( int i = 0; i < 5; i++ )
+		Charge = Add.Panel("charge");
+		ChargeBackgroundBar = Charge.Add.Panel("background");
+		ChargeForegroundBar = ChargeBackgroundBar.Add.Panel("foreground");
+	}
+
+	public override void Tick()
+	{
+		base.Tick();
+
+		if (Local.Pawn is not Player player)
+			return;
+
+		Charge.SetClass("hidden", true);
+
+		if (player.ActiveChild is Weapon weapon)
+		{
+			if (weapon.ChargeAttackEndTime > 0f && Time.Now < weapon.ChargeAttackEndTime)
 			{
-				var p = Add.Panel( "element" );
-				p.AddClass( $"el{i}" );
+				var timeLeft = weapon.ChargeAttackEndTime - Time.Now;
+
+				ChargeForegroundBar.Style.Width = Length.Percent(100f - ((100f / weapon.ChargeAttackDuration) * timeLeft));
+				ChargeForegroundBar.Style.Dirty();
+
+				Charge.SetClass("hidden", false);
 			}
-
-			Charge = Add.Panel( "charge" );
-			ChargeBackgroundBar = Charge.Add.Panel( "background" );
-			ChargeForegroundBar = ChargeBackgroundBar.Add.Panel( "foreground" );
 		}
 
-		public override void Tick()
-		{
-			base.Tick();
+		this.PositionAtCrosshair();
 
-			if ( Local.Pawn is not Player player )
-				return;
+		SetClass("fire", _fireCounter > 0);
 
-			Charge.SetClass( "hidden", true );
+		if (_fireCounter > 0)
+			_fireCounter--;
+	}
 
-			if ( player.ActiveChild is Weapon weapon )
-			{
-				if ( weapon.ChargeAttackEndTime > 0f && Time.Now < weapon.ChargeAttackEndTime )
-				{
-					var timeLeft = weapon.ChargeAttackEndTime - Time.Now;
-
-					ChargeForegroundBar.Style.Width = Length.Percent( 100f - ((100f / weapon.ChargeAttackDuration) * timeLeft) );
-					ChargeForegroundBar.Style.Dirty();
-
-					Charge.SetClass( "hidden", false );
-				}
-			}
-
-			this.PositionAtCrosshair();
-
-			SetClass( "fire", _fireCounter > 0 );
-
-			if ( _fireCounter > 0 )
-				_fireCounter--;
-		}
-
-		[PanelEvent]
-		public void FireEvent()
-		{
-			_fireCounter += 2;
-		}
+	[PanelEvent]
+	public void FireEvent()
+	{
+		_fireCounter += 2;
 	}
 }

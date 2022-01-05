@@ -5,3 +5,4 @@ Properties
 codegen-*
 sbox-hidden.csproj
 .intermediate
+/tools_asset_info.bin

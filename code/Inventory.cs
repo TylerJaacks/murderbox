@@ -1,42 +1,42 @@
-﻿using Sandbox;
-using System;
+﻿using System;
 using System.Linq;
 
-namespace HiddenGamemode
+using Sandbox;
+
+// ReSharper disable once CheckNamespace
+namespace MurderboxGamemode;
+
+partial class Inventory : BaseInventory
 {
-	partial class Inventory : BaseInventory
+	public Inventory(Player player) : base(player)
 	{
-		public Inventory( Player player ) : base( player )
+
+	}
+
+	public override bool Add(Entity entity, bool makeActive = false)
+	{
+		var player = Owner as Player;
+
+		if (entity is Weapon weapon && IsCarryingType(entity.GetType()))
 		{
+			var ammo = weapon.AmmoClip;
+			var ammoType = weapon.AmmoType;
 
-		}
-
-		public override bool Add( Entity entity, bool makeActive = false )
-		{
-			var player = Owner as Player;
-			var weapon = entity as Weapon;
-
-			if ( weapon != null && IsCarryingType( entity.GetType() ) )
+			if (ammo > 0)
 			{
-				var ammo = weapon.AmmoClip;
-				var ammoType = weapon.AmmoType;
-
-				if ( ammo > 0 )
-				{
-					player.GiveAmmo( ammoType, ammo );
-				}
-
-				entity.Delete();
-
-				return false;
+				player?.GiveAmmo(ammoType, ammo);
 			}
 
-			return base.Add( entity, makeActive );
+			entity.Delete();
+
+			return false;
 		}
 
-		public bool IsCarryingType( Type t )
-		{
-			return List.Any( x => x.GetType() == t );
-		}
+		return base.Add(entity, makeActive);
+	}
+
+	public bool IsCarryingType(Type t)
+	{
+		return List.Any(x => x.GetType() == t);
 	}
 }

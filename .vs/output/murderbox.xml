@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>murderbox</name>
+    </assembly>
+    <members>
+        <member name="M:MurderboxGamemode.CustomWalkController.GetHull">
+            <summary>
+            Get the hull size for the player's collision.
+            </summary>
+        </member>
+        <member name="M:MurderboxGamemode.CustomWalkController.UpdateBBox">
+            <summary>
+            Update the size of the bbox. We should really trigger some shit if this changes.
+            </summary>
+        </member>
+        <member name="M:MurderboxGamemode.CustomWalkController.Accelerate(Vector3,System.Single,System.Single,System.Single)">
+            <summary>
+            Add our wish direction and speed onto our velocity.
+            </summary>
+        </member>
+        <member name="M:MurderboxGamemode.CustomWalkController.ApplyFriction(System.Single)">
+            <summary>
+            Remove ground friction from velocity.
+            </summary>
+        </member>
+        <member name="M:MurderboxGamemode.CustomWalkController.UpdateGroundEntity(Sandbox.TraceResult)">
+            <summary>
+            Check for a new ground entity.
+            </summary>
+        </member>
+        <member name="M:MurderboxGamemode.CustomWalkController.ClearGroundEntity">
+            <summary>
+            We're no longer on the ground, remove it.
+            </summary>
+        </member>
+        <member name="M:MurderboxGamemode.CustomWalkController.TraceBBox(Vector3,Vector3,System.Single)">
+            <summary>
+            Traces the current bbox and returns the result.
+            liftFeet will move the start position up by this amount, while keeping the top of the bbox at the same 
+            position. This is good when tracing down because you won't be tracing through the ceiling above.
+            </summary>
+        </member>
+        <member name="M:MurderboxGamemode.CustomWalkController.StayOnGround">
+            <summary>
+            Try to keep a walking player on the ground when running down slopes, etc.
+            </summary>
+        </member>
+    </members>
+</doc>

@@ -1,52 +1,48 @@
-﻿
-using Sandbox;
-using Sandbox.UI;
-using Sandbox.UI.Construct;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace HiddenGamemode
+using Sandbox.UI;
+using Sandbox.UI.Construct;
+
+// ReSharper disable once CheckNamespace
+namespace MurderboxGamemode;
+
+public class InventoryColumn : Panel
 {
-	public class InventoryColumn : Panel
+	public int Column;
+	public Label Header;
+
+	internal List<InventoryIcon> Icons = new();
+
+	public InventoryColumn(int i, Panel parent)
 	{
-		public int Column;
-		public bool IsSelected;
-		public Label Header;
-		public int SelectedIndex;
+		Parent = parent;
+		Column = i;
+		Header = Add.Label($"{i + 1}", "slot-number");
+	}
 
-		internal List<InventoryIcon> Icons = new();
+	internal void UpdateWeapon(Weapon weapon)
+	{
+		var icon = ChildrenOfType<InventoryIcon>().FirstOrDefault(x => x.Weapon == weapon);
 
-		public InventoryColumn( int i, Panel parent )
+		if (icon == null)
 		{
-			Parent = parent;
-			Column = i;
-			Header = Add.Label( $"{i + 1}", "slot-number" );
-		}
-
-		internal void UpdateWeapon( Weapon weapon )
-		{
-			var icon = ChildrenOfType<InventoryIcon>().FirstOrDefault( x => x.Weapon == weapon );
-
-			if ( icon == null )
+			icon = new InventoryIcon(weapon)
 			{
-				icon = new InventoryIcon( weapon )
-				{
-					Parent = this
-				};
+				Parent = this
+			};
 
-				Icons.Add( icon );
-			}
+			Icons.Add(icon);
 		}
+	}
 
-		internal void TickSelection( Weapon selectedWeapon )
+	internal void TickSelection(Weapon selectedWeapon)
+	{
+		SetClass("active", selectedWeapon?.Bucket == Column);
+
+		foreach (var icon in Icons)
 		{
-			SetClass( "active", selectedWeapon?.Bucket == Column );
-
-			for ( int i = 0; i < Icons.Count; i++ )
-			{
-				Icons[i].TickSelection( selectedWeapon );
-			}
+			icon.TickSelection(selectedWeapon);
 		}
 	}
 }

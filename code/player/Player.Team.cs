@@ -1,33 +1,32 @@
 ﻿using Sandbox;
 using System;
 
-namespace HiddenGamemode
+namespace MurderboxGamemode;
+
+partial class Player
 {
-	partial class Player
+	[Net] public int TeamIndex { get; set; }
+	public int LastTeamIndex { get; set; }
+	private BaseTeam _team;
+
+	public BaseTeam Team
 	{
-		[Net] public int TeamIndex { get; set; }
-		public int LastTeamIndex { get; set; }
-		private BaseTeam _team;
+		get => _team;
 
-		public BaseTeam Team
+		set
 		{
-			get => _team;
-
-			set
+			// A player must be on a valid team.
+			if (value != null && value != _team)
 			{
-				// A player must be on a valid team.
-				if ( value != null && value != _team )
+				_team?.Leave(this);
+				_team = value;
+				_team.Join(this);
+
+				if (IsServer)
 				{
-					_team?.Leave( this );
-					_team = value;
-					_team.Join( this );
+					TeamIndex = _team.Index;
 
-					if ( IsServer )
-					{
-						TeamIndex = _team.Index;
-
-						Client.SetInt("team", TeamIndex);
-					}
+					Client.SetInt("team", TeamIndex);
 				}
 			}
 		}

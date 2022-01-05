@@ -1,34 +1,35 @@
-﻿using Sandbox;
-using System;
+﻿using System;
 
-namespace HiddenGamemode
+using Sandbox;
+
+// ReSharper disable once CheckNamespace
+namespace MurderboxGamemode;
+
+partial class ViewModel : BaseViewModel
 {
-	partial class ViewModel : BaseViewModel
+	float WalkBob = 0;
+
+	public override void PostCameraSetup(ref CameraSetup camSetup)
 	{
-		float walkBob = 0;
+		base.PostCameraSetup(ref camSetup);
 
-		public override void PostCameraSetup( ref CameraSetup camSetup )
+		AddCameraEffects(ref camSetup);
+	}
+
+	private void AddCameraEffects(ref CameraSetup camSetup)
+	{
+		Rotation = Local.Pawn.EyeRot;
+
+		var speed = Owner.Velocity.Length.LerpInverse(0, 320);
+		var left = camSetup.Rotation.Left;
+		var up = camSetup.Rotation.Up;
+
+		if (Owner.GroundEntity != null)
 		{
-			base.PostCameraSetup( ref camSetup );
-
-			AddCameraEffects( ref camSetup );
+			WalkBob += Time.Delta * 25.0f * speed;
 		}
 
-		private void AddCameraEffects( ref CameraSetup camSetup )
-		{
-			Rotation = Local.Pawn.EyeRot;
-
-			var speed = Owner.Velocity.Length.LerpInverse( 0, 320 );
-			var left = camSetup.Rotation.Left;
-			var up = camSetup.Rotation.Up;
-
-			if ( Owner.GroundEntity != null )
-			{
-				walkBob += Time.Delta * 25.0f * speed;
-			}
-
-			Position += up * MathF.Sin( walkBob ) * speed * -1;
-			Position += left * MathF.Sin( walkBob * 0.6f ) * speed * -0.5f;
-		}
+		Position += up * MathF.Sin(WalkBob) * speed * -1;
+		Position += left * MathF.Sin(WalkBob * 0.6f) * speed * -0.5f;
 	}
 }

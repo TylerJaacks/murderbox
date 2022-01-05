@@ -5,63 +5,62 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HiddenGamemode
+namespace MurderboxGamemode;
+
+public class PlayerCorpse : ModelEntity
 {
-	public class PlayerCorpse : ModelEntity
+	public Player Player { get; set; }
+
+	public PlayerCorpse()
 	{
-		public Player Player { get; set; }
+		MoveType = MoveType.Physics;
+		UsePhysicsCollision = true;
 
-		public PlayerCorpse()
+		SetInteractsAs(CollisionLayer.Debris);
+		SetInteractsWith(CollisionLayer.WORLD_GEOMETRY);
+		SetInteractsExclude(CollisionLayer.Player | CollisionLayer.Debris);
+	}
+
+	public void CopyFrom(Player player)
+	{
+		SetModel(player.GetModelName());
+		TakeDecalsFrom(player);
+
+		// We have to use `this` to refer to the extension methods.
+		this.CopyBonesFrom(player);
+		this.SetRagdollVelocityFrom(player);
+
+		foreach (var child in player.Children)
 		{
-			MoveType = MoveType.Physics;
-			UsePhysicsCollision = true;
-
-			SetInteractsAs(CollisionLayer.Debris );
-			SetInteractsWith(CollisionLayer.WORLD_GEOMETRY );
-			SetInteractsExclude(CollisionLayer.Player | CollisionLayer.Debris );
-		}
-
-		public void CopyFrom( Player player )
-		{
-			SetModel( player.GetModelName() );
-			TakeDecalsFrom( player );
-
-			// We have to use `this` to refer to the extension methods.
-			this.CopyBonesFrom( player );
-			this.SetRagdollVelocityFrom( player );
-
-			foreach ( var child in player.Children )
+			if (child is ModelEntity e)
 			{
-				if ( child is ModelEntity e )
-				{
-					var model = e.GetModelName();
+				var model = e.GetModelName();
 
-					if ( model != null && !model.Contains( "clothes" ) )
-						continue;
+				if (model != null && !model.Contains("clothes"))
+					continue;
 
-					var clothing = new ModelEntity();
-					clothing.SetModel( model );
-					clothing.SetParent( this, true );
-				}
+				var clothing = new ModelEntity();
+				clothing.SetModel(model);
+				clothing.SetParent(this, true);
 			}
 		}
+	}
 
-		public void ApplyForceToBone( Vector3 force, int forceBone )
+	public void ApplyForceToBone(Vector3 force, int forceBone)
+	{
+		PhysicsGroup.AddVelocity(force);
+
+		if (forceBone >= 0)
 		{
-			PhysicsGroup.AddVelocity( force );
+			var body = GetBonePhysicsBody(forceBone);
 
-			if ( forceBone >= 0 )
+			if (body != null)
 			{
-				var body = GetBonePhysicsBody( forceBone );
-
-				if ( body != null )
-				{
-					body.ApplyForce( force * 1000 );
-				}
-				else
-				{
-					PhysicsGroup.AddVelocity( force );
-				}
+				body.ApplyForce(force * 1000);
+			}
+			else
+			{
+				PhysicsGroup.AddVelocity(force);
 			}
 		}
 	}

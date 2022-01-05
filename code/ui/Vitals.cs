@@ -1,18 +1,15 @@
-﻿
-using Sandbox;
+﻿using Sandbox;
 using Sandbox.UI;
-using Sandbox.UI.Construct;
 
-namespace HiddenGamemode
+// ReSharper disable once CheckNamespace
+namespace MurderboxGamemode
 {
 	public class Vitals : Panel
 	{
-		public Stamina Stamina;
 		public Health Health;
 
 		public Vitals()
 		{
-			Stamina = AddChild<Stamina>();
 			Health = AddChild<Health>();
 		}
 
@@ -20,7 +17,7 @@ namespace HiddenGamemode
 		{
 			if ( Local.Pawn is not Player player ) return;
 
-			SetClass( "hidden", player.LifeState != LifeState.Alive );
+			SetClass( "murderer", player.LifeState != LifeState.Alive );
 
 			base.Tick();
 		}

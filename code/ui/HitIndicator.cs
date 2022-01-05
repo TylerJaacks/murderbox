@@ -4,41 +4,40 @@ using Sandbox.UI.Construct;
 using System;
 using System.Threading.Tasks;
 
-namespace HiddenGamemode
+namespace MurderboxGamemode;
+
+public partial class HitIndicator : Panel
 {
-	public partial class HitIndicator : Panel
+	public static HitIndicator Current;
+
+	public HitIndicator()
 	{
-		public static HitIndicator Current;
+		Current = this;
+		StyleSheet.Load("/ui/HitIndicator.scss");
+	}
 
-		public HitIndicator()
+	public override void Tick()
+	{
+		base.Tick();
+	}
+
+	public void OnHit(Vector3 pos, float amount)
+	{
+		_ = new HitPoint(amount, pos, this);
+	}
+
+	public class HitPoint : Panel
+	{
+		public HitPoint(float amount, Vector3 pos, Panel parent)
 		{
-			Current = this;
-			StyleSheet.Load( "/ui/HitIndicator.scss" );
+			Parent = parent;
+			_ = Lifetime();
 		}
 
-		public override void Tick()
+		async Task Lifetime()
 		{
-			base.Tick();
-		}
-
-		public void OnHit( Vector3 pos, float amount )
-		{
-			_ = new HitPoint( amount, pos, this );
-		}
-
-		public class HitPoint : Panel
-		{
-			public HitPoint( float amount, Vector3 pos, Panel parent )
-			{
-				Parent = parent;
-				_ = Lifetime();
-			}
-
-			async Task Lifetime()
-			{
-				await Task.Delay( 200 );
-				Delete();
-			}
+			await Task.Delay(200);
+			Delete();
 		}
 	}
 }

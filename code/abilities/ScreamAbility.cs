@@ -5,46 +5,44 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HiddenGamemode
+namespace MurderboxGamemode;
+
+public partial class ScreamAbility : BaseAbility
 {
-	public partial class ScreamAbility : BaseAbility
+	public override float Cooldown => 10;
+	public override string Name => "Scream";
+
+	private string[] _screamSounds = new string[]
 	{
-		public override float Cooldown => 10;
-		public override string Name => "Scream";
+		"scream-01",
+		"scream-02",
+		"scream-03",
+		"scream-04"
+	};
 
-		private string[] _screamSounds = new string[]
+	public override string GetKeybind()
+	{
+		return Input.GetKeyWithBinding("iv_view").ToUpper();
+	}
+
+	protected override void OnUse(Player player)
+	{
+		Log.Info((Host.IsServer ? "Server: " : "Client: ") + "Time Since Last: " + TimeSinceLastUse);
+
+		TimeSinceLastUse = 0;
+
+		if (Host.IsServer)
 		{
-			"scream-01",
-			"scream-02",
-			"scream-03",
-			"scream-04"
-		};
-
-		public override string GetKeybind()
-		{
-			return Input.GetKeyWithBinding( "iv_view" ).ToUpper();
-		}
-
-		protected override void OnUse( Player player )
-		{
-			Log.Info( (Host.IsServer ? "Server: " : "Client: ") + "Time Since Last: " + TimeSinceLastUse );
-
-			TimeSinceLastUse = 0;
-
-			if ( Host.IsServer )
+			using (Prediction.Off())
 			{
-				using ( Prediction.Off() )
-				{
-					PlayScreamSound( player );
-				}
+				PlayScreamSound(player);
 			}
 		}
+	}
 
-		private void PlayScreamSound( Player from )
-		{
-			var soundName = Rand.FromArray( _screamSounds );
-			from.PlaySound( soundName );
-		}
+	private void PlayScreamSound(Player from)
+	{
+		var soundName = Rand.FromArray(_screamSounds);
+		from.PlaySound(soundName);
 	}
 }
-
